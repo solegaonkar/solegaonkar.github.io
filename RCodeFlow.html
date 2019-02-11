@@ -1,0 +1,56 @@
+<!DOCTYPE html><html><head><title>R Code Flow</title><script src='scripts/index.js'></script></head><body><h1>R Code Flow</h1><hr/>
+
+<p>Line most programming languages, R provides code flow support using if/else blocks and for/while loops. No developer would need a detailed explanation about these. The below code snippets give an overview of how it is used in R code.</p><h4>if / else / else if</h4><hr/><pre><code class='r'>output &lt;- 'blank'
+number &lt;- 10
+
+if(number &gt; 10){
+    report &lt;- "Greater than 10"
+}else if (number &lt; 10){
+    report &lt;- "Less than 10"
+}else{
+    report &lt;- 'Equal to 10'
+}
+print(report)
+
+[1] Equal to 10</code></pre><h4>for loops</h4><hr/><p>We have versatile for loops in R. It provides ways of looping through the various data structures like vectors, lists, matrix, arrays.</p><pre><code class='r'>vec &lt;- c(1,3,4,6,9)
+for (v in vec) {
+    print(v)
+}
+
+[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5</code></pre><p>You can do the same with other data structures as well. Also the collection can be generated dynamically in the command:</p><pre><code class='r'>for ( i in 1:10 ){
+    print (i)
+}
+
+[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+[1] 6
+[1] 7
+[1] 8
+[1] 9
+[1] 10</code></pre><h4>While Loops</h4><hr/><p>While loops provide a more generic and more powerful mechanism to loop. The While loops in R are quite similar to most other languages:</p><pre><code class='r'>&gt; x &lt;- 0
+&gt; while(x &lt; 10){
++   cat('Value of x: ',x)
++   print("X is still less than 10")
++   # add one to x
++   x &lt;- x+1
++ }
+Value of x:  0[1] "X is still less than 10"
+Value of x:  1[1] "X is still less than 10"
+Value of x:  2[1] "X is still less than 10"
+Value of x:  3[1] "X is still less than 10"
+Value of x:  4[1] "X is still less than 10"
+Value of x:  5[1] "X is still less than 10"
+Value of x:  6[1] "X is still less than 10"
+Value of x:  7[1] "X is still less than 10"
+Value of x:  8[1] "X is still less than 10"
+Value of x:  9[1] "X is still less than 10"
+&gt;</code></pre><p>While loops also provide for break and next if you want to cut short through the loop at any point.</p>
+
+</body><script>loadPageFormat();</script></script></html>

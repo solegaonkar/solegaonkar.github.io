@@ -1,0 +1,1 @@
+localStorage.setItem("html", document.body.innerHTML);localStorage.setItem("url", window.location.href);localStorage.setItem("title", document.title);window.location = "index.html";

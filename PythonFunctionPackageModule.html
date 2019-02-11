@@ -1,0 +1,48 @@
+<!DOCTYPE html><html><head><title>Functions Modules &amp; Packages</title><script src='scripts/index.js'></script></head><body><h1>Functions Modules &amp; Packages</h1><hr/>
+
+<p>Now, let's move on to another basic component of any language - Modularity. Any decent language - be it a low level assembly language or a 4G language that generates code, has to provide some mechanism that allows us to reuse what we have done once. It provides for some way of extracting common functionality and hiding its complexity. Of course, Python adds its own flavor to this. Let us see how.</p><p>Python provides modularity in three forms - Functions (or Methods), Modules, and Classes.</p><h2>Functions</h2><hr/><pre><code class='python'>'Demonstrate Python Functions'
+def getFunction(full=True):
+     'Outer Function'
+     print(getFunction.__doc__)
+     def p(frm=0, to=1, step=1):
+         'Inner Function'
+         print(p.__doc__)
+         return (x ** 3 for x in range(frm, to, step))
+
+     if (full):
+         return p
+     else:
+         return lambda frm = 0, to = 1, step = 1: (x ** 3 \
+              for x in range(frm, to, step))
+
+print(__doc__)
+
+t = getFunction()
+
+print("Check the elaborate function")
+for v in t(step=1, to=10):
+     print(v)
+
+t = getFunction(False)
+print("Check the lambda function")
+
+for v in t(1, 5):
+    print(v)</code></pre><p>As shown above, functions can be abbreviated using lambda functions. That saves the lines of code and can be used to improve performance - so long as it is readable.</p><p>Python provides for a concept similar to Java Docs. The first line in a function - if a single quoted string, is considered the function doc. But, Python takes this a step further. It is possible to use this value in code!</p><h2>Modules</h2><hr/><p>Modules provide a way to reuse code. A module is simply a file containing python code that we can 'import' into our code.</p><pre><code class='python'>import re
+
+def plural(noun):
+     if re.search('[sxz]$', noun):
+         return re.sub('$', 'es', noun)
+     elif re.search('[^aeioudgkprt]h$', noun):
+         return re.sub('$', 'es', noun)
+     elif re.search('[^aeiou]y$', noun):
+         return re.sub('y$', 'ies', noun)
+     else:
+         return noun + 's'
+
+if __name__ == '__main__':
+     print (plural('abc'))
+     print (plural('def'))
+     print (plural('des'))
+     print (plural('xyz'))</code></pre><p>Check out the code above. The first line imports a module re - that is built into Python. As the name suggests, it is meant for regular expressions. It has several methods related to regular expression search, replace, etc. All the methods / objects inside this module are invoked with the prefix of re.</p><p>You can also notice the line</p><pre><code class='python'>if __name__ == '__main__':</code></pre><p>before the main code starts. This is a useful construct in any code that your write. It helps anyone who might import this code as a module. When you run this code as a standalone code, it will execute the code under this if clause. But, if anyone imports this module, it is most likely that he just wants the methods in this module, he does not want to run the code outside these methods. This construct prevents such an accident.</p><p>The built in dir() function can be used to identify at runtime, the list of names defined within a given module. If you like, you can import only a part of the module by using the (from module import method) construct.</p><h2>Packages</h2><hr/><p>Packages are a common means of avoiding name clashes. You can import a module from a package using the (from package import module) construct. Python packages are similar to Java. Each package should have its own folder. You can have sub packages in subfolders.</p><p>One additional requirement that Python imposes for packages is that a package folder should have the init.py file. Python will consider a folder as a package only if it has this script. This file could be empty, or it can define the value of all. The all is the list of modules defined in the package - that would be imported if the user invokes (from package import *).</p><p>This is a helpful construct - something like the main inside a module file. It prevents unwanted execution of any additional code that is saved in the package folder - it allows you to save additional code in the package folder.</p><p>The init.py script can also execute any initialization code for the package.</p>
+
+</body><script>loadPageFormat();</script></script></html>

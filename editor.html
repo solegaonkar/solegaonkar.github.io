@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Introduction to Machine Learning">
+    <meta name="author" content="Vikas K. Solegaonkar">
+
+    <link rel="stylesheet" type="text/css" href="vendor/consent/cookieconsent.min.css" />
+
+    <title>
+        Editor
+    </title>
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="vendor/highlight/styles/default.css">
+    <link href="css/blog-post.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div id="header" class="container">
+            <a class="navbar-brand" href="index.php">Learn with the Machines</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="../index.php">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="UsefulResources.php">Useful Resources</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../about.html">About Me</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class='col-md-12'></div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+            </div>
+            <div class="col-lg-8">
+                <div id="blog">
+
+                </div>
+                <div>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <div id="ui">
+                        <input id="title" style="width:100%"></input>
+                        <hr/>
+                        <button type="button" class="btn btn-info" onclick="add('text','p')">P</button>
+                        <button type="button" class="btn btn-info" onclick="add('h1');add('hr');">H1</button>
+                        <button type="button" class="btn btn-info" onclick="add('h2');add('hr');">H2</button>
+                        <button type="button" class="btn btn-info" onclick="add('h3');add('hr');">H3</button>
+                        <button type="button" class="btn btn-info" onclick="add('h4');add('hr');">H4</button>
+                        <button type="button" class="btn btn-info" onclick="add('sub')">Sub</button>
+                        <button type="button" class="btn btn-info" onclick="add('sup')">Sup</button>
+                        <button type="button" class="btn btn-info" onclick="add('footer')">Footer</button>
+
+                        <button type="button" class="btn btn-info" onclick="add('list','ul')">UL</button>
+                        <button type="button" class="btn btn-info" onclick="add('list','ol')">OL</button>
+                        <button type="button" class="btn btn-info" onclick="add('image')">IMG</button>
+                        <button type="button" class="btn btn-info" onclick="add('table')">Table</button>
+                        <button type="button" class="btn btn-info" onclick="add('hr')">HR</button>
+                        <hr/>
+                        <button type="button" class="btn btn-info" onclick="fix()">Fix</button>
+                        <button type="button" class="btn btn-info" onclick="add('a')">Anchor</button>
+                        <button type="button" class="btn btn-info" onclick="add('ad')">Google Ad</button>
+                        <button type="button" class="btn btn-info" onclick="add('code','code')">Code</button>
+                        <button type="button" class="btn btn-info" onclick="add('code','python')">Python</button>
+                        <button type="button" class="btn btn-info" onclick="add('code','r')">R</button>
+                        <button type="button" class="btn btn-info" onclick="add('code','java')">Java</button>
+                        <button type="button" class="btn btn-info" onclick="add('code','perl')">Perl</button>
+                        <button type="button" class="btn btn-info" onclick="add('code','javascript')">JavaScript</button>
+                        <button type="button" class="btn btn-info" onclick="add('code','sh')">Bash</button>
+                        <button type="button" class="btn btn-info" onclick="add('code','cpp')">C++</button>
+                        <hr/>
+                        <textarea id="input" rows="5" style="width:100%"></textarea>
+                        <hr/>
+                        <textarea id="content" rows="5" style="width:100%"></textarea>
+                        <hr/>
+                        <textarea id="html" rows="5" readonly style="width:100%"></textarea>
+                    </div>
+                </div>
+                <div class="col-lg-2" id="sidebar"></div>
+            </div>
+        </div>
+    </div>
+    <div></div>
+    <footer class="py-5">
+        <div class="container">
+            <p class="m-0 text-center text-muted">Copyright &copy; Vikas K. Solegaonkar 2019</p>
+        </div>
+    </footer>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/highlight/highlight.pack.js"></script>
+    <script src="scripts/util.js"></script>
+
+    <script src="vendor/consent/cookieconsent.min.js"></script>
+
+</body>
+
+</html>

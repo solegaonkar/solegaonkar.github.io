@@ -1,0 +1,46 @@
+<!DOCTYPE html><html><head><title>Regular Expressions</title><script src='scripts/index.js'></script></head><body><h1>Regular Expressions</h1><hr/>
+
+<p>Since JDK 1.4, Java introduced the package java.util.regex - that contains all the classes that aid regular expressions.</p>
+
+<p>A Regular Expression is a way to define a string pattern. Regular expression is not limited to Java. Today, most languages have regular expressions built into them. The syntax of regular expressions is quite common among all these languages. There are some minor differences that each language proposes. But, once we have a good grasp on any one, it will not require much effort to use the same knowledge elsewhere.</p>
+
+<p>Java offers modules for implementing regular expressions through the package java.util.regex This defines two major classes Pattern and Matcher; along with the interface MatchResult. These can be used in our code to implement Regular Expressions. We an have an Exception class - PatternSyntaxException - which is thrown if the syntax of the Regex pattern is not good. The typical way to proceed is as follows:</p><ol><li>Identify the regular expression for the requirement</li><li>    Compile the string holding this regular expression into a Pattern</li><li>    Get a Matcher for the Pattern and the target string and then Check if the target string 'matches' the pattern.</li></ol><h3>Pattern</h3><hr/><p>The pattern class has the following important methods:</p><table><tr><th>Method</th><th>Description</th></tr><tr><td>static Pattern compile(String regex)</td><td>This is the factory method for this class. It compiles the given regex and return the instance of Pattern.</td></tr><tr><td>Matcher matcher(CharSequence input)</td><td>For the given Pattern and the input string, it creates a Matcher object that describes how Pattern matches with the given input.</td></tr><tr><td>static boolean matches(String regex, CharSequence input)</td><td>It works as the combination of compile and matcher methods. It compiles the regular expression and matches the given input with the pattern.</td></tr><tr><td>String[] split(CharSequence input)</td><td>splits the given input string around matches of given pattern.</td></tr><tr><td>String pattern()</td><td>returns the regex pattern.</td></tr></table><h3>Matcher</h3><hr/><p>It implements MatchResult interface.</p><table><tr><th>Method</th><th>Description</th></tr><tr><td>boolean matches()</td><td>This tests for an exact match. Returns true if the input matches patterns end to end.</td></tr><tr><td>boolean find()</td><td>This checks for a kind of "contains" match. Not just that, it moves the cursor to the match found. There could be multiple matches within the string. Each invocation of find() method will move the cursor to the next match.</td></tr><tr><td>boolean find(int start)</td><td>Essentially the same as find(). But it starts the matching process after skipping the first few characters (as defined by start). Every call to find(4) will start afresh from the 4th character.</td></tr><tr><td>String group()</td><td>returns the matched subsequence.</td></tr><tr><td>int start()</td><td>This is meaningful only if called after a successfully find() or find(start). It returns the starting index of the matched subsequence.</td></tr><tr><td>int end()</td><td>returns the ending index of the matched subsequence.</td></tr><tr><td>int groupCount()</td><td>This returns the total number of the matched subsequence.</td></tr></table><h3>Example</h3><hr/><p>Suppose we want to write code that identifies if the string starts with a number followed white space. Here, we start with developing a regular expression. For a string starting with a number followed by white space, the regular expression would be "\d+\s"</p><pre><code class='java'>package com.solegaonkar.learnjava;
+
+import java.util.regex.*;
+
+public class RegexExample1{
+ public static void main(String args[]){
+  //1st way
+  Pattern p = Pattern.compile("\\d+\\s+");//. represents single character
+  Matcher m = p.matcher("123 234 ");
+  while (m.find()) {
+   System.out.printf("%s: %d: %d\n", m.group(), m.start(), m.end());
+  }
+  boolean b = m.matches();
+
+  m = p.matcher("123 234 123 456 677 666");
+  if (m.find(5)) {
+    System.out.printf("%s: %d: %d\n", m.group(), m.start(), m.end());
+  }
+  if (m.find(4)) {
+    System.out.printf("%s: %d: %d\n", m.group(), m.start(), m.end());
+  }
+  boolean b1 = m.matches();
+
+  //2nd way
+  boolean b2=Pattern.compile("\\d+\\s.*").matcher("12 ds").matches();
+
+  //3rd way
+  boolean b3 = Pattern.matches("\\d+\\s.*", "123 fds");
+
+  System.out.println(b+" "+b2+" "+b3);
+ }
+}</code></pre><p>This generates the following output</p><pre><code class='java'>123 : 0: 4
+234 : 4: 8
+34 : 5: 8
+234 : 4: 8
+false true true</code></pre><p>Note that we use \\ instead of \ in the regex string. This is because \ is a special character in the string and we need to escape it with another \.</p>
+
+<p>This is a top level introduction to the concepts of Java Reflection API. For more details, you can check out the <a href="https://docs.oracle.com/javase/tutorial/essential/regex/index.html">Java Documentation</a>.</p>
+
+</body><script>loadPageFormat();</script></script></html>

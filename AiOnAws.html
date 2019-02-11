@@ -1,0 +1,75 @@
+<!DOCTYPE html><html><head><title>AI on AWS</title><script src='scripts/index.js'></script></head><body><h1>AI on AWS</h1><hr/>
+
+
+<p>AWS provides us several services for solving machine learning problems on different levels. Starting with high performance EC2 instances and scalable SageMaker to specialized services like Textract, Comprehend, Deepracer, Greengrass and many more. AWS also provides ready to deploy services like Lex. Let us have a look at each of these.</p><h3>DLAMI</h3><hr/><p>AWS Deep Learning AMI is the one-stop shop for all deep learning in the cloud. It provides us with customized machine instances for a variety of instance types, from a small CPU-only instance to the latest high-powered multi-GPU instances. It comes preconfigured with NVIDIA CUDA and NVIDIA cuDNN, as well as the latest releases of the most popular deep learning frameworks.</p><h3>SageMaker</h3><hr/><p>Amazon SageMaker is a fully managed machine learning service. With Amazon SageMaker, data scientists and developers can quickly and easily build and train machine learning models, and then directly deploy them into a production-ready hosted environment. It provides an integrated Jupyter authoring notebook instance for easy access to your data sources for exploration and analysis, so you don't have to manage servers. It also provides common machine learning algorithms that are optimized to run efficiently against extremely large data in a distributed environment. With native support for bring-your-own-algorithms and frameworks, Amazon SageMaker provides flexible distributed training options that adjust to your specific workflows.</p><h3>SageMaker Ground Truth</h3><hr/><p>Amazon SageMaker Ground Truth helps us quickly build accurate training datasets for machine learning.</p><p>Building machine learning models requires us to create datasets for training the models. Before we can select the algorithms, build models, and deploy them, we need human annotators to manually review thousands of examples and add the labels required to train machine learning models. </p><p>This process is expensive in time and money. Amazon SageMaker Ground Truth makes it much easier for developers to label their data using human annotators. It learns from these annotations in real time and can automatically apply labels to much of the remaining dataset, reducing the need for human review. Thus, it creates highly accurate training data sets; saves time and complexity, and reduces costs by up to up to 70 percent when compared to human annotation.</p><h3>Amazon Machine Learning</h3><hr/><p>Amazon Machine Learning (Amazon ML) provides visualization tools and wizards that can guide us through the process of creating models without having to learn complex ML algorithms and technology. Once the models are ready, Amazon ML makes it easy to obtain predictions using simple APIs, without having to implement custom prediction generation code, or manage any infrastructure.</p><h3>Comprehend</h3><hr/><p>Amazon Comprehend is based on natural language processing. It extracts insights about contents of a given UTF-8 text file without the any special pre-processing. It develops insights by recognizing the entities, key phrases, language, sentiments, and other common elements in a document. </p><p>We can use Amazon Comprehend to create products based on understanding the structure of documents. We can search social networking feeds for information, or scan an entire document repository for key phrases, or determine the topics contained in a set of documents. We can also use it to extract insights from clinical documents such as doctor’s notes or clinical trial reports.</p><p>Comprehend Medical is a new service that can detect useful information from an unstructured clinical text - physician's notes, discharge summaries, test results, case notes, and so on. Comprehend Medical uses Natural Language Processing models to leverage the latest advances in machine learning to sort through this enormous quantity of data and retrieve valuable information that would require significant manual effort.</p><p>Python code that detects the various entities in a given text string looks like this</p><pre><code class='python'>import boto3
+client = boto3.client('comprehend')
+response = client.batch_detect_entities(
+    TextList=[
+        'string',
+    ],
+    LanguageCode='en'|'es'|'fr'|'de'|'it'|'pt'
+)</code></pre>
+<h3>Amazon Polly</h3><hr/><p>Amazon Polly cloud based service that converts text to speech. We can use it to make applications more engaging and accessible. It supports multiple languages and includes a variety of lifelike voices.</p><p>AWS takes care of most of  the job here. For a developer, it is just a few lines of code:</p><pre><code class='python'>import boto3
+
+polly_client = boto3.Session(
+                aws_access_key_id=,                     
+    aws_secret_access_key=,
+    region_name='us-west-2').client('polly')
+
+# Aditi specializes in Indian English.
+response = polly_client.synthesize_speech(VoiceId='Aditi',
+                OutputFormat='mp3', 
+                Text = 'Provide the text here. Polly will speak it for you.')
+
+file = open('speech.mp3', 'w')
+file.write(response['AudioStream'].read())
+file.close()</code></pre>
+<h3>Rekognition</h3><hr/><p>Amazon Rekognition can be used to add image and video analysis to applications. For any given image or video the Rekognition API can identify objects, people, text, scenes, and activities. It can detect any inappropriate content as well. It provides facial analysis and facial recognition. It can detect, analyze, and compare faces for a wide variety of use cases, including user verification, cataloging, people counting, and public safety.</p><p>Amazon Rekognition makes images and stored videos searchable so that we can discover objects and scenes that appear within them.</p><p>A sample application using Rekognition API for facial recognition would look like this:</p><pre><code class='python'>import boto3
+
+if __name__ == "__main__":
+    bucket='bucket'
+    collectionId='Sample Collection'
+    threshold = 40
+    maxFaces=3
+    faceId='xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+
+    client=boto3.client('rekognition')
+    response=client.search_faces(CollectionId=collectionId,
+                                FaceId=faceId,
+                                FaceMatchThreshold=threshold,
+                                MaxFaces=maxFaces)
+                        
+    faceMatches=response['FaceMatches']
+    print 'Matched faces'
+    for match in faceMatches:
+            print 'Matching FaceId:' + match['Face']['FaceId']
+            print 'Face Similarity: ' + "{:.3f}".format(match['Similarity']) + "%"</code></pre>
+<h3>Transcribe</h3><hr/><p>The Amazon Transcribe service can be used to recognize speech in audio files and convert it to text. It can identify the individual speakers in an audio clip. We can use it to convert audio to text and to create applications that incorporate the content of audio files, for example, adding subtitles to a movie, or noting the minutes of a meeting.</p><p>A simple Python application that uses Amazon Transcribe to analyze an audio clip looks like this</p><pre><code class='python'>import time
+import boto3
+transcribe = boto3.client('transcribe')
+job_name = "job name"
+job_uri = "https://S3 endpoint/test-transcribe/sample_audio.wav"
+transcribe.start_transcription_job(
+    TranscriptionJobName=job_name,
+    Media={'MediaFileUri': job_uri},
+    MediaFormat='wav',
+    LanguageCode='en-US'
+)
+while True:
+    status = transcribe.get_transcription_job(TranscriptionJobName=job_name)
+    if status['TranscriptionJob']['TranscriptionJobStatus'] in ['COMPLETED', 'FAILED']:
+        break
+    print("Not ready yet...")
+    time.sleep(5)
+print(status)</code></pre>
+<h3>Translate</h3><hr/><p>Amazon Translate uses advanced machine learning technologies to provide high-quality translation on demand. We can use it to translate unstructured text documents or to build applications that work in multiple languages. (Not all languages are supported as yet).</p><p>A simple Python script that uses Amazon Translate would look like this:</p><pre><code class='python'>import boto3
+
+translate = boto3.client(service_name='translate', region_name='us-west-2', use_ssl=True)
+result = translate.translate_text(Text="Translate this English sentence into French", 
+            SourceLanguageCode="en", TargetLanguageCode="fr")
+print('TranslatedText: ' + result.get('TranslatedText'))
+print('SourceLanguageCode: ' + result.get('SourceLanguageCode'))
+print('TargetLanguageCode: ' + result.get('TargetLanguageCode'))</code></pre>
+<h3>Amazon Lex</h3><hr/><p>Amazon Lex is a complete service that can build a conversational interfaces from the Web Console. The conversations can use text as well as voice. It provides us the deep learning engine that powers Amazon Alexa. It is now available to any developer, enabling us to build sophisticated, chatbots into our applications. </p><p>It provides the functionality of natural language understanding (NLU) and automatic speech recognition (ASR) to build conversational interactions with the end user.</p>
+
+</body><script>loadPageFormat();</script></script></html>

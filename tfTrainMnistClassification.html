@@ -1,0 +1,47 @@
+<!DOCTYPE html><html><head><title>Train the Model</title><script src='scripts/index.js'></script></head><body><h1>Train the Model</h1><hr/>
+
+<p>With everything in place, we can now start off with training a model. We start with creating a Keras Sequential model. We can check out the details about different types of models in the following blogs:</p><pre><code class='python'>model = tf.keras.Sequential()</code></pre><p>Let us add three layers to this model. Keras allows us to add many layers. But for a problem like this, 3 layers should be good enough.</p><pre><code class='python'>model.add(tf.keras.layers.Dense(50, activation=tf.nn.relu, input_shape=(784,)))
+model.add(tf.keras.layers.Dense(25, activation=tf.nn.relu))
+model.add(tf.keras.layers.Dense(10, activation=tf.nn.softmax))</code></pre><p>The input shape of 784 is defined by the size of each entity in the input data. We have images of 784 each. So that is where we start. And the output size has to be 10 - because we have 10 possible outcomes. A typical network has a softmax activation at the last layer and relu in the inner hidden layers.</p><p>The size of each layer is just an estimate based on judgement. We can develop this judgement with practice and experience and understanding of how the Neural Networks work. You can try playing around with these to see the effect each has on the model efficiency.</p><p>Next, we compile and train the model with the data available.</p><pre><code class='python'>model.compile(loss="categorical_crossentropy", optimizer=tf.train.AdamOptimizer(), metrics=['accuracy'])
+model.fit(augmented_images, augmented_labels, epochs=20)</code></pre><p>The parameters to the compiler - loss="categorical_crossentropy" and optimizer=tf.train.AdamOptimizer() may seem hazy. You can check up the blogs on <a href="index.html" class='link'>Deep Learning</a> to understand them better.</p><p>The method model.fit() does the actual work of training the model with the data we have.</p><p>This generates an output:</p><pre><code class='python'>Epoch 1/20
+300000/300000 [==============================] - 18s 58us/step - loss: 0.2248 - acc: 0.9335
+Epoch 2/20
+300000/300000 [==============================] - 17s 57us/step - loss: 0.1131 - acc: 0.9661
+Epoch 3/20
+300000/300000 [==============================] - 17s 57us/step - loss: 0.0926 - acc: 0.9722
+Epoch 4/20
+300000/300000 [==============================] - 18s 59us/step - loss: 0.0814 - acc: 0.9751
+Epoch 5/20
+300000/300000 [==============================] - 17s 57us/step - loss: 0.0737 - acc: 0.9775
+Epoch 6/20
+300000/300000 [==============================] - 17s 57us/step - loss: 0.0676 - acc: 0.9792
+Epoch 7/20
+300000/300000 [==============================] - 17s 56us/step - loss: 0.0636 - acc: 0.9804
+Epoch 8/20
+300000/300000 [==============================] - 17s 56us/step - loss: 0.0596 - acc: 0.9811
+Epoch 9/20
+300000/300000 [==============================] - 17s 56us/step - loss: 0.0573 - acc: 0.9821
+Epoch 10/20
+300000/300000 [==============================] - 17s 57us/step - loss: 0.0543 - acc: 0.9831
+Epoch 11/20
+300000/300000 [==============================] - 17s 57us/step - loss: 0.0518 - acc: 0.9837
+Epoch 12/20
+300000/300000 [==============================] - 17s 57us/step - loss: 0.0498 - acc: 0.9843
+Epoch 13/20
+300000/300000 [==============================] - 17s 56us/step - loss: 0.0482 - acc: 0.9848
+Epoch 14/20
+300000/300000 [==============================] - 17s 56us/step - loss: 0.0466 - acc: 0.9854
+Epoch 15/20
+300000/300000 [==============================] - 16s 55us/step - loss: 0.0454 - acc: 0.9855
+Epoch 16/20
+300000/300000 [==============================] - 17s 55us/step - loss: 0.0440 - acc: 0.9860
+Epoch 17/20
+300000/300000 [==============================] - 17s 55us/step - loss: 0.0427 - acc: 0.9864
+Epoch 18/20
+300000/300000 [==============================] - 17s 57us/step - loss: 0.0416 - acc: 0.9866
+Epoch 19/20
+300000/300000 [==============================] - 17s 57us/step - loss: 0.0397 - acc: 0.9872
+Epoch 20/20
+300000/300000 [==============================] - 17s 56us/step - loss: 0.0394 - acc: 0.9873</code></pre><p>We can see the loss reducing and accuracy increasing with each iteration. Note that the outputs may not always match accurately - that is because of the random nature of the shuffle and training. But the trend should be similar.</p>
+
+</body><script>loadPageFormat();</script></script></html>

@@ -1,0 +1,606 @@
+<!DOCTYPE html><html><head><title>Apache DB Utils</title><script src='scripts/index.js'></script></head><body><h1>Apache DB Utils</h1><hr/>
+
+<p>Apache Commons DbUtils library is a great utility library designed to simplify JDBC and reducing the problems of resource leak and to have cleaner code. As JDBC resource cleanup is quite tedious and error prone, DBUtils classes helps to abstract out the boiler plate code so that developers can focus on database related operations only.</p><p>Advantages of using DBUtils:</p><ul><li>Minimal and Functional - It does what is normally required, without much frills.</li><li>    Transparent − DBUtils library is not doing much work behind the scenes. It simply takes query and executes.</li><li>    Fast − DBUtils library classes do not create many background objects and is quite fast in database operation executions.</li><li>    No Resource Leakage − DBUtils classes ensures that no resource leakage happen.</li><li>    Clean & Clear code − DBUtils classes provides clean and clear code to do database operations without needing to write any cleanup or resource leak prevention code.</li><li>    Bean Mapping − DBUtils class supports to automatically populate javabeans from a result set.</li></ul><h2>Sample Implementation</h2><hr/><p>The DbUtils library is quite easy to use. The most frequently used functionalities are detailed below. All these sample programs revolve around a MySQL database with a table - Employee. DBUtils map this database table to the Employee class.</p><pre><code class='java'>public class Employee {
+   private int id;
+   private int age;
+   private String first;
+   private String last;
+   public int getId() {
+      return id;
+   }
+   public void setId(int id) {
+      this.id = id;
+   }
+   public int getAge() {
+      return age;
+   }
+   public void setAge(int age) {
+      this.age = age;
+   }
+   public String getFirst() {
+      return first;
+   }
+   public void setFirst(String first) {
+      this.first = first;
+   }
+   public String getLast() {
+      return last;
+   }
+   public void setLast(String last) {
+      this.last = last;
+   }
+}</code></pre><h2>CRUD Operations</h2><hr/><p>Below you can see the sample CRUD operations using the Apache DB Utils</p><h3>Create</h3><hr/><p>Starting with the Create operation. You need an instance of the QueryRunner to perform the update operation with the INSERT Sql command</p><pre><code class='java'>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+
+public class MainApp {
+   // JDBC driver name and database URL
+   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+   static final String DB_URL = "jdbc:mysql://localhost:3306/emp";
+
+   //  Database credentials
+   static final String USER = "root";
+   static final String PASS = "admin";
+
+   public static void main(String[] args) throws SQLException {
+      Connection conn = null;
+      QueryRunner queryRunner = new QueryRunner();
+      DbUtils.loadDriver(JDBC_DRIVER);       
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+      try {
+         int insertedRecords = queryRunner.update(conn, 
+            "INSERT INTO employees(id,age,first,last)  VALUES (?,?,?,?)",
+            104,30, "Sohan","Kumar");           
+         System.out.println(insertedRecords + " record(s) inserted");
+      } finally {
+         DbUtils.close(conn);
+      }  
+   }
+}</code></pre><h3>Read</h3><hr/><p>For implementing the Read operation, you need an object of ResultHandler that helps the QueryRunner to fetch the result from the database.</p><pre><code class='java'>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+
+public class MainApp {
+   // JDBC driver name and database URL
+   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+   static final String DB_URL = "jdbc:mysql://localhost:3306/emp";
+
+   //  Database credentials
+   static final String USER = "root";
+   static final String PASS = "admin";
+
+   public static void main(String[] args) throws SQLException {
+      Connection conn = null;
+      QueryRunner queryRunner = new QueryRunner();
+      //Step 1: Register JDBC driver
+      DbUtils.loadDriver(JDBC_DRIVER);
+
+      //Step 2: Open a connection
+      System.out.println("Connecting to database...");
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+      //Step 3: Create a ResultSet Handler to handle Employee Beans
+      ResultSetHandler resultHandler = 
+         new BeanHandler(Employee.class);
+
+      try {
+         Employee emp = queryRunner.query(conn, "SELECT * FROM employees WHERE id=?",
+            resultHandler, 104);
+         //Display values
+         System.out.print("ID: " + emp.getId());
+         System.out.print(", Age: " + emp.getAge());
+         System.out.print(", First: " + emp.getFirst());
+         System.out.println(", Last: " + emp.getLast());
+      } finally {
+         DbUtils.close(conn);
+      }        
+   }
+}</code></pre><h3>Update</h3><hr/><p>The next in the list is Update operation. From the DB Utils point of view, this is very similar to the Create operation. You just create an object of the QueryRunner that can run an UPDATE query on the database.</p><pre><code class='java'>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+
+public class MainApp {
+   // JDBC driver name and database URL
+   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+   static final String DB_URL = "jdbc:mysql://localhost:3306/emp";
+
+   //  Database credentials
+   static final String USER = "root";
+   static final String PASS = "admin";
+
+   public static void main(String[] args) throws SQLException {
+      Connection conn = null;
+      QueryRunner queryRunner = new QueryRunner();
+  
+      DbUtils.loadDriver(JDBC_DRIVER);       
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+      try {
+         int updatedRecords = queryRunner.update(conn, 
+            "UPDATE employees SET age=? WHERE id=?", 33,104);         
+         System.out.println(updatedRecords + " record(s) updated.");
+      } finally {
+         DbUtils.close(conn);
+      }        
+   }
+}</code></pre><h3>Delete</h3><hr/><p>So also is the Delete operation. Just use an object of the QueryRunner to run the DELETE command on the database.</p><pre><code class='java'>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+
+public class MainApp {
+   // JDBC driver name and database URL
+   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+   static final String DB_URL = "jdbc:mysql://localhost:3306/emp";
+
+   //  Database credentials
+   static final String USER = "root";
+   static final String PASS = "admin";
+
+   public static void main(String[] args) throws SQLException {
+      Connection conn = null;
+      QueryRunner queryRunner = new QueryRunner();
+    
+      DbUtils.loadDriver(JDBC_DRIVER);       
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+      try {
+         int deletedRecords = queryRunner.update(conn, 
+            "DELETE from employees WHERE id=?", 104);         
+         System.out.println(deletedRecords + " record(s) deleted.");
+      } finally {
+         DbUtils.close(conn);
+      }  
+   }
+}</code></pre><h2>Details</h2><hr/><p>Apache DB Utils provides a lot more than this. Below are some of the important utility classes that make the task a lot more simple.</p><h3>AsyncQueryRunner</h3><hr/><p>The org.apache.commons.dbutils.AsyncQueryRunner class helps to execute long running SQL queries with async support. This class is thread safe. This class supports same methods as QueryRunner but it return Callable objects which can be used later to retrieve the result.</p><pre><code class='java'>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import org.apache.commons.dbutils.AsyncQueryRunner;
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException; 
+import java.util.concurrent.ExecutorCompletionService; 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors; 
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+public class MainApp {
+   // JDBC driver name and database URL
+   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+   static final String DB_URL = "jdbc:mysql://localhost:3306/emp";
+
+   //  Database credentials
+   static final String USER = "root";
+   static final String PASS = "admin";
+
+   public static void main(String[] args) throws 
+      SQLException, InterruptedException, 
+      ExecutionException, TimeoutException {
+      Connection conn = null;
+
+      AsyncQueryRunner asyncQueryRunner = new AsyncQueryRunner( Executors.newCachedThreadPool());
+
+      DbUtils.loadDriver(JDBC_DRIVER);       
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+      Future future = null;
+      try {
+
+         future = asyncQueryRunner.update(conn, 
+            "UPDATE employees SET age=? WHERE id=?", 33,103);         
+
+         Integer updatedRecords = future.get(10, TimeUnit.SECONDS);
+         System.out.println(updatedRecords + " record(s) updated.");
+      } finally {
+         DbUtils.close(conn);
+      }  
+   }
+}</code></pre><h3>ResultSetHandler</h3><hr/><p>The ResultSetHandler provides a utility Interface that helps you manage the result set from the JDBC operation. The below code shows an example of the kind of functionality it provides.</p><pre><code class='java'>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.Arrays;
+
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+
+public class MainApp {
+   // JDBC driver name and database URL
+   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+   static final String DB_URL = "jdbc:mysql://localhost:3306/emp";
+
+   //  Database credentials
+   static final String USER = "root";
+   static final String PASS = "admin";
+
+   public static void main(String[] args) throws SQLException {
+      Connection conn = null;
+      QueryRunner queryRunner = new QueryRunner();
+      
+      //Step 1: Register JDBC driver
+      DbUtils.loadDriver(JDBC_DRIVER);
+
+      //Step 2: Open a connection
+      System.out.println("Connecting to database...");
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+      //Step 3: Create a ResultSet Handler to handle Employee Beans
+      ResultSetHandler handler = new ResultSetHandler() {
+         public Object[] handle(ResultSet rs) throws SQLException {
+            if (!rs.next()) {
+               return null;
+            }
+            ResultSetMetaData meta = rs.getMetaData();
+            int cols = meta.getColumnCount();
+            Object[] result = new Object[cols];
+
+            for (int i = 0; i < cols; i++) {
+               result[i] = rs.getObject(i + 1);
+            }
+            return result;
+         }
+      };
+
+      try {
+         Object[] result  = queryRunner.query(conn, "SELECT * FROM employees WHERE id=?",
+            handler, 103);
+         //Display values
+         System.out.print("Result: " + Arrays.toString(result));            
+      } finally {
+         DbUtils.close(conn);
+      }              
+   }
+}</code></pre><h3>BeanHandler</h3><hr/><p>The org.apache.commons.dbutils.BeanHandler is the implementation of ResultSetHandler interface and is responsible to convert the first ResultSet row into a JavaBean. This class is thread safe.</p><pre><code class='java'>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+
+public class MainApp {
+   // JDBC driver name and database URL
+   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+   static final String DB_URL = "jdbc:mysql://localhost:3306/emp";
+
+   //  Database credentials
+   static final String USER = "root";
+   static final String PASS = "admin";
+
+   public static void main(String[] args) throws SQLException {
+      Connection conn = null;
+      QueryRunner queryRunner = new QueryRunner();
+      
+      //Step 1: Register JDBC driver
+      DbUtils.loadDriver(JDBC_DRIVER);
+
+      //Step 2: Open a connection
+      System.out.println("Connecting to database...");
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+      //Step 3: Create a ResultSet Handler to handle Employee Beans
+      ResultSetHandler resultHandler 
+         = new BeanHandler(Employee.class);
+
+      try {
+         Employee emp = queryRunner.query(conn, "SELECT * FROM employees WHERE first=?",
+               resultHandler, "Sumit");
+         //Display values
+         System.out.print("ID: " + emp.getId());
+         System.out.print(", Age: " + emp.getAge());
+         System.out.print(", First: " + emp.getFirst());
+         System.out.println(", Last: " + emp.getLast());
+      } finally {
+         DbUtils.close(conn);
+      }              
+   }
+}</code></pre><h3>BeanListHandler</h3><hr/><p>The org.apache.commons.dbutils.BeanListHandler is the implementation of ResultSetHandler interface and is responsible to convert the ResultSet rows into list of Java Bean. This class is thread safe.</p><pre><code class='java'>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
+
+public class MainApp {
+   // JDBC driver name and database URL
+   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+   static final String DB_URL = "jdbc:mysql://localhost:3306/emp";
+
+   //  Database credentials
+   static final String USER = "root";
+   static final String PASS = "admin";
+
+   public static void main(String[] args) throws SQLException {
+      Connection conn = null;
+      QueryRunner queryRunner = new QueryRunner();
+      
+      //Step 1: Register JDBC driver
+      DbUtils.loadDriver(JDBC_DRIVER);
+
+      //Step 2: Open a connection
+      System.out.println("Connecting to database...");
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+      //Step 3: Create a ResultSet Handler to handle List of Employee Beans
+      ResultSetHandler> resultHandler = new BeanListHandler(Employee.class);
+
+      try {
+         List empList = queryRunner.query(conn, "SELECT * FROM employees", resultHandler);
+         for(Employee emp: empList ) {
+            
+            //Display values
+            System.out.print("ID: " + emp.getId());
+            System.out.print(", Age: " + emp.getAge());
+            System.out.print(", First: " + emp.getFirst());
+            System.out.println(", Last: " + emp.getLast());
+         }           
+      } finally {
+         DbUtils.close(conn);
+      }        
+   }
+}</code></pre><h3>ArrayListHandler</h3><hr/><p>The org.apache.commons.dbutils.ArrayListHandler is the implementation of ResultSetHandler interface and is responsible to convert the ResultSet rows into a object[]. This class is thread safe.</p><pre><code class='java'>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.ArrayListHandler;
+
+public class MainApp {
+   // JDBC driver name and database URL
+   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+   static final String DB_URL = "jdbc:mysql://localhost:3306/emp";
+
+   //  Database credentials
+   static final String USER = "root";
+   static final String PASS = "admin";
+
+   public static void main(String[] args) throws SQLException {
+      Connection conn = null;
+      QueryRunner queryRunner = new QueryRunner();
+      
+      //Step 1: Register JDBC driver
+      DbUtils.loadDriver(JDBC_DRIVER);
+
+      //Step 2: Open a connection
+      System.out.println("Connecting to database...");
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);        
+
+      try {
+         List result = queryRunner.query(conn, "SELECT * FROM employees"
+            , new ArrayListHandler());  
+         for(Object[] objects : result) {
+            System.out.println(Arrays.toString(objects));
+         }           
+      } finally {
+         DbUtils.close(conn);
+      }        
+   }
+}</code></pre><h3>MapListHandler</h3><hr/><p>The org.apache.commons.dbutils.MapListHandler is the implementation of ResultSetHandler interface and is responsible to convert the ResultSet rows into list of Maps. This class is thread safe.</p><pre><code class='java'>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.MapListHandler;
+
+public class MainApp {
+   // JDBC driver name and database URL
+   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+   static final String DB_URL = "jdbc:mysql://localhost:3306/emp";
+
+   //  Database credentials
+   static final String USER = "root";
+   static final String PASS = "admin";
+
+   public static void main(String[] args) throws SQLException {
+      Connection conn = null;
+      QueryRunner queryRunner = new QueryRunner();
+      
+      //Step 1: Register JDBC driver
+      DbUtils.loadDriver(JDBC_DRIVER);
+
+      //Step 2: Open a connection
+      System.out.println("Connecting to database...");
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);        
+
+      try {
+         List> result 
+            = queryRunner.query(conn, "SELECT * FROM employees", new MapListHandler());      
+         System.out.println(result);
+      } finally {
+         DbUtils.close(conn);
+      }        
+   }
+}</code></pre><h2>Customizing DB Utils</h2><hr/><p>Apache also provides us with a lot of different ways to customize the DB Utils to suite our requirements.</p><h3>Custom Handler</h3><hr/><p>We can create our own custom handler by implementing ResultSetHandler interface or by extending any of the existing implementation of ResultSetHandler. In the example given below, we've created a Custom Handler, EmployeeHandler by extending BeanHandler class. To understand this concept, check out the example below.</p><pre><code class='java'>import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.apache.commons.dbutils.handlers.BeanHandler;
+
+public class EmployeeHandler extends BeanHandler {
+
+   public EmployeeHandler() {
+      super(Employee.class);
+   }
+
+   @Override
+   public Employee handle(ResultSet rs) throws SQLException {
+      Employee employee = super.handle(rs);
+      employee.setName(employee.getFirst() +", " + employee.getLast());
+      return employee;
+   }
+}</code></pre><pre><code class='java'>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+
+public class MainApp {
+   // JDBC driver name and database URL
+   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+   static final String DB_URL = "jdbc:mysql://localhost:3306/emp";
+
+   //  Database credentials
+   static final String USER = "root";
+   static final String PASS = "admin";
+
+   public static void main(String[] args) throws SQLException {
+      Connection conn = null;
+      QueryRunner queryRunner = new QueryRunner();
+      DbUtils.loadDriver(JDBC_DRIVER);                 
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);        
+      EmployeeHandler employeeHandler = new EmployeeHandler();
+
+      try {
+         Employee emp = queryRunner.query(conn, "SELECT * FROM employees WHERE first=?",
+            employeeHandler, "Sumit");
+         
+         //Display values
+         System.out.print("ID: " + emp.getId());
+         System.out.print(", Age: " + emp.getAge());
+         System.out.print(", Name: " + emp.getName());
+      } finally {
+         DbUtils.close(conn);
+      }        
+   }
+}</code></pre><h3>Custom Row Processor</h3><hr/><p>In case column names in a database table and equivalent javabean object names are not similar then we can map them by using customized BasicRowProcessor object. See the example below.</p><pre><code class='java'>import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.BeanProcessor;
+import org.apache.commons.dbutils.BasicRowProcessor;
+
+public class EmployeeHandler extends BeanHandler {
+
+   public EmployeeHandler() {
+      super(Employee.class, new BasicRowProcessor(new BeanProcessor(mapColumnsToFields())));
+   }
+
+   @Override
+   public Employee handle(ResultSet rs) throws SQLException {
+      Employee employee = super.handle(rs);
+      employee.setName(employee.getFirst() +", " + employee.getLast());
+      return employee;
+   }
+   
+   public static Map mapColumnsToFields() {
+      Map columnsToFieldsMap = new HashMap<>();
+      columnsToFieldsMap.put("ID", "id");
+      columnsToFieldsMap.put("AGE", "age");        
+      return columnsToFieldsMap;
+   }
+}</code></pre><pre><code class='java'>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+
+public class MainApp {
+   // JDBC driver name and database URL
+   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+   static final String DB_URL = "jdbc:mysql://localhost:3306/emp";
+
+   //  Database credentials
+   static final String USER = "root";
+   static final String PASS = "admin";
+
+   public static void main(String[] args) throws SQLException {
+      Connection conn = null;
+      QueryRunner queryRunner = new QueryRunner();      
+      DbUtils.loadDriver(JDBC_DRIVER);                 
+      conn = DriverManager.getConnection(DB_URL, USER, PASS);        
+      EmployeeHandler employeeHandler = new EmployeeHandler();
+
+      try {
+         Employee emp = queryRunner.query(conn, "SELECT * FROM employees WHERE first=?",
+           employeeHandler, "Sumit");
+         
+         //Display values
+         System.out.print("ID: " + emp.getId());
+         System.out.print(", Age: " + emp.getAge());
+         System.out.print(", Name: " + emp.getName());
+      } finally {
+         DbUtils.close(conn);
+      }              
+   }
+}</code></pre><h3>Custom Data Source</h3><hr/><p>So far, we've using connection object while using QueryRunner. We can also use datasource seemlessly. The following example will demonstrate how to read a record using Read query with the help of QueryRunner and datasource. We'll read a record from Employees Table.</p><pre><code class='java'>import javax.sql.DataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
+
+public class CustomDataSource {
+   // JDBC driver name and database URL
+   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+   static final String DB_URL = "jdbc:mysql://localhost:3306/emp";
+   
+   //  Database credentials
+   static final String USER = "root";
+   static final String PASS = "admin";
+   private static DataSource datasource;
+   private static final BasicDataSource basicDataSource;
+
+   static {
+      basicDataSource = new BasicDataSource();
+      basicDataSource.setDriverClassName(JDBC_DRIVER);
+      basicDataSource.setUsername(USER);
+      basicDataSource.setPassword(PASS);
+      basicDataSource.setUrl(DB_URL);
+   }
+
+   public static DataSource getInstance() {
+      return basicDataSource;
+   }
+}</code></pre><pre><code class='java'>import java.sql.SQLException;
+
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.ResultSetHandler;
+import org.apache.commons.dbutils.handlers.BeanHandler;
+
+public class MainApp {
+   public static void main(String[] args) throws SQLException {    
+      
+      DbUtils.loadDriver(JDBC_DRIVER);
+      QueryRunner run = new QueryRunner(CustomDataSource.getInstance());
+      ResultSetHandler resultHandler = new BeanHandler(Employee.class);
+
+      Employee emp = queryRunner.query("SELECT * FROM employees WHERE id=?",
+         resultHandler, 103);
+      
+      //Display values
+      System.out.print("ID: " + emp.getId());
+      System.out.print(", Age: " + emp.getAge());
+      System.out.print(", First: " + emp.getFirst());
+      System.out.println(", Last: " + emp.getLast());
+   }
+}</code></pre><p>DB Utils provides a simple, lightweight alternative to various ORM frameworks like Hibernate and iBatis. It can be used where you do not need something so elaborate.</p>
+
+</body><script>loadPageFormat();</script></script></html>

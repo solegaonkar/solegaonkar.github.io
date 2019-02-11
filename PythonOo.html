@@ -1,0 +1,52 @@
+<!DOCTYPE html><html><head><title>Object Oriented Python</title><script src='scripts/index.js'></script></head><body><h1>Object Oriented Python</h1><hr/>
+
+<p>After reading the simple scripts we have seen so far, one might wonder why is it called an object oriented language. Yes, Python does not come in way of plain functional code, and allows you to write simple script to do small chunks of tasks. But Python is object oriented to its core! Everything in Python is an object - everything including the code itself!</p><p>Before we jump into the Python implementation of classes, and object orientation in general. Let's introspect to ask ourselves, what exactly do we mean by object oriented code? What is good or bad about object oriented code? Why is it more maintainable and when is it not efficient?</p><p>What is an object? In software, an object is defined as "something that has a defined behavior influenced by some information related to it". Any software, whether it is functional or object oriented, implements some functionality for objects. What matters is the point of focus - whether the functionality is in focus or the object itself? A functional code would have all the functionality separated from the information, whereas a good object oriented code should have the information clubbed with the behavior.</p><p>The language used to do this is not so important. You can have Java code that is functional in essence and also have C code that is object oriented in essence. What matters is the spirit of clubbing together the information with the behavior of the object. There is no good or bad about functional or object oriented code. Both are equally good in their own context. What is important is identifying which one is required in the current scenario and then applying it appropriately. Most often it is a mixture. For example, a properties file used to configure the system pulls out the information - thus adding a functional flavor to it. Or a function static variables in a C code clubs the behavior with the data - making it object oriented.</p><p>With that, let us get into the details of object oriented coding in Python. From the point of view of semantics, Python provides for class definition, inheritance, constructor, destructor and member variables. For some strange reason, they forgot to add private members. Python allows you all the freedom, but provides guidelines for discipline with conventions. Python does not let you enforce private members, but it is a universally accepted convention that any member variable with name starting with _ or __ has a special meaning and should not be touched by 'outsiders'. Developers use this for adding private members.</p><p>Python provides two special member methods - init and del. These are similar to the constructor and destructor. Needless to say that constructor is invoked when the object is created and can be used to initialize any members, while destructor is invoked in the cleanup process and is used to perform any cleanup activity.</p><p>A class can define several member methods and variables. One peculiar point about member functions is that they all must have one first parameter - self. Python compiler does not enforce the name "self". But, convention dictates it. Don't use any other word there if you feel that someone somewhere might ever peek into your code. This parameter is not passed to the method when calling it in the context of an object. But, the runtime takes care of passing a reference to the particular object in there.</p><h2>Example</h2><hr/><p>Let's check out this example code that gives basic details:</p><pre><code class='python'># A Sample Base Class to demostrate basic semantics
+
+class Base:
+     "A Sample Base Class"
+     def __init__(self):
+         print("Base Class Constructor")
+         self._base_member_variable_ = 0
+
+     def __del__(self):
+         print("Base Class Constructor")
+
+     def printBaseValue(self):
+         print("Base Class: " + str(self._base_member_variable_))
+
+# A Sample Derrived Class to demostrate basic semantics
+
+class Derrived(Base):
+     "A Sample Derrived Class"
+     def __init__(self):
+         super(Derrived, self).__init__()
+         print("Derrived Class Constructor")
+         self._derrived_member_variable_ = 1
+
+     def __del__(self):
+         print("Derrived Class Constructor")
+         super(Derrived, self).__del__()
+
+     def printDerrivedValue(self):
+         print("Derrived Class: " + str(self._derrived_member_variable_))
+         print("Derrived Class: " + str(self._base_member_variable_))
+
+# A Python method to check out the classes defined above.
+def checkout():
+     o = Derrived()
+     print(o.__class__)
+     print(o.__doc__)
+     o.printBaseValue()
+     o.printDerrivedValue()
+
+checkout();</code></pre><p>The output of this code looks like this:</p><pre><code class='python'>Base Class Constructor
+Derrived Class Constructor
+
+A Sample Derrived Class
+Base Class: 0
+Derrived Class: 1
+Derrived Class: 0
+Derrived Class Destructor
+Base Class Destructor</code></pre><h2>Points to Note</h2><hr/><p>Notice the following points in the code above:</p><p>A derived class id defined with the base class as a parameter in its definition. Python allows for Multiple Inheritance. In case of Multiple Inheritance, we can have clashes in method names. Python takes care of this by giving higher priority to the first parent in the list.</p><p>All the methods in the class are defined with one minimum parameter (self). This is not passed to the methods when they are invoked in the context of the object. The interpreter takes care of passing a reference of the object in this parameter.</p><p>A unique feature in Python is the support for code documentation. The line immediately after the class keyword is the class document. This can be a multiline or single line string. This is not just a code comment that is used for better readability, but Python allows you to use this documentation at runtime. What more, you can also modify this at runtime!</p><p>Note that the member variables in the class are not explicitly declared anywhere. They are just assigned values in the code. And they are available after that. Since the variables are not private, we can always create new variables in an object - at runtime. Thus, the variables are not really member variables - they are not tied to the class definition - they are just associated with the given instance. But, Python reflection code is powerful enough to show us this association and lets us manipulate them.</p><p>The object is created by invoking the constructor. We do not need a new keyword while creating objects in Python. The destructor is called when the object goes out of scope and needs to be destroyed. If the parent class constructor and destructor should be invoked, we need to call them explicitly.</p><p>The method 'super' is part of the reflection API, that lets you identify the superclass of the given child class.</p><p>This short structure of Python's Object Oriented code allows for infinite possibilities.</p>
+
+</body><script>loadPageFormat();</script></script></html>

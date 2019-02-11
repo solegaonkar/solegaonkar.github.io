@@ -1,0 +1,29 @@
+<!DOCTYPE html><html><head><title>R Operators</title><script src='scripts/index.js'></script></head><body><h1>R Operators</h1><hr/>
+
+<p>R is quite rich in operators it provides. Not be as rich as Perl - but, the operators in R are taylored towards handling chunks of data. By default all the operators when applied on vectors perform the operation on individual corresponding elements. Operators in R can be classified into 5 major types:</p><h3>Arithmetic</h3><hr/><p>R defines these arithmetic operators +, -, *, /, %%, %/%, ^</p><p>The meaning of +, -, *, /, ^ is the same as in most other languages. That does not need any clarification. The %% and %/% are more interesting. Both are related to integer division. One gives the quotient and the other gives the remainder</p><pre><code class='r'>&gt; # / performs the usual division
+&gt; c(4, 2, 5.5, 6.5) / c(2, 4, 2.5, 3)
+[1] 2.000000 0.500000 2.200000 2.166667
+
+&gt; # %% gives the remainder. Note that both the operands could be non integers. 
+&gt; # But the operator ensures integer division.
+&gt; c(4, 2, 5.5, 6.5) %% c(2, 4, 2.5, 3)
+[1] 0.0 2.0 0.5 0.5
+
+&gt; # %/% gives the quotient. Note that both the operands could be non integers. 
+&gt; # But the operator ensures integer division.
+&gt; c(4, 2, 5.5, 6.5) %/% c(2, 4, 2.5, 3)
+[1] 2 0 2 2</code></pre><h3>Relational</h3><hr/><p>R defines the usual relational operators: &lt;, &gt;, =&lt;, &gt;=, ==, !=</p><p>They mean almost what they would mean in any other language. But, as mentioned above, the operators work on individual elements in the vector and produce another vector of boolean elements that stand for the result of each individual comparison. For example:</p><pre><code class='r'>&gt; c(4, 2, 5.5, 6.5) &lt; c(2, 4, 2.5, 3)
+[1] FALSE  TRUE FALSE FALSE</code></pre><h3>Logical</h3><hr/><p>R defines all the usual logical operators: &amp;, |, !, &amp;&amp; and ||</p><p>The operators &amp;, | and ! do just what one would expect - operate on individual elements of the operand vectors and produce another boolean vector as result. But the &amp;&amp; and || work differently - They just operate on the first elements of the vectors and return a single boolean value based on that.</p><h3>Assignment</h3><hr/><p>There are two types of assignments in R. Left assignment and Right assignment.</p><pre><code class='r'>&gt; a &lt;- c(1,2,3)
+&gt; a
+[1] 1 2 3
+&gt; c(3,4,5,6) -&gt; a
+&gt; a
+[1] 3 4 5 6</code></pre><p>You can also use &lt;&lt;-, -&gt;&gt; and ofcourse = There are subtle differences between these - we will check them out down the line.</p><h3>Miscellaneous</h3><hr/><p>R also provides other operators :, %in% and %*%</p><pre><code class='r'>print(2:8) 
+[1] 2 3 4 5 6 7 8
+
+print(8 %in% 1:10) 
+[1] TRUE
+print(12 %in% 1:10)
+[1] FALSE</code></pre><p>These are not limited to numbers. They work as well on other data types.</p>
+
+</body><script>loadPageFormat();</script></script></html>

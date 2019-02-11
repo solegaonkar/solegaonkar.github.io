@@ -1,0 +1,128 @@
+body {
+  padding-top: 54px;
+  font-family: calibri;
+  font-size: 0.9em;
+}
+
+/**
+Additions
+**/
+ul {
+  margin: 0;
+  padding-left: 1em; /* Set the distance from the list edge to 1x the font size */
+  padding-bottom:0.6em;
+  list-style-position: outside;
+  list-style-image: url('../img/check.png');
+}
+hr {
+    display: block;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: groove;
+    border-width: 1px;
+}
+hr.ad {
+    display: block;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: groove;
+    border-width: 10px;
+}
+ol {
+  margin: 0;
+  padding-bottom:0.6em;
+  padding-left: 1em; /* Set the distance from the list edge to 1x the font size */
+  list-style-position: outside;
+}
+h1 {
+  margin-top: 1em;
+  margin-bottom: 0;
+  font-size: 2.4em;
+}
+h2 {
+  margin-top: 0.8em;
+  margin-bottom: 0;
+  font-size: 2em;
+}
+h3 {
+  margin-top: 0.5em;
+  margin-bottom: 0;
+  font-size: 1.65em;
+}
+h4 {
+  margin-top: 0.3em;
+  margin-bottom: 0;
+  font-size: 1.35em;
+}
+p {
+  margin-bottom: 0.15em;
+  padding-bottom:0.5em;
+  font-size: 0.95em;
+}
+a {
+  color: #0082ce;
+  font-size: 1em;
+}
+td, th {
+  border: 1px solid #ddd;
+  padding: 0.3em;
+}
+
+.center {
+  text-align:center;
+}
+
+tr:nth-child(even){background-color: #f2f2f2;}
+
+tr:hover {background-color: #ddd;}
+
+th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #e6ffe6;
+  color: black;
+}
+
+.bgimg {background-image: url('/img/ai-banner.jpg');
+background-repeat: no-repeat;
+    background-size: 100%;}
+
+@media (min-width: 768px) {
+  .modal-xl {width: 70%;max-width:1200px;}
+  body {
+    padding-top: 40px;
+    font-size: 1em;
+    }
+    h1 {
+      margin-top: 1em;
+      font-size: 3em;
+    }
+    h2 {
+      margin-top: 0.8em;
+      margin-bottom: 0;
+      font-size: 2.2em;
+    }
+    h3 {
+      margin-top: 0.6em;
+      margin-bottom: 0;
+      font-size: 1.8em;
+    }
+    h4 {
+      margin-top: 0.4em;
+      margin-bottom: 0;
+      font-size: 1.4em;
+    }
+    p {
+      font-size: 1.0em;
+      margin-bottom: 0.2em;
+    }
+    a {
+      color: #0082ce;
+      font-size: 1.03em;
+    }
+    }

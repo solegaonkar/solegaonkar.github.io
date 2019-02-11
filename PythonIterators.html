@@ -1,0 +1,32 @@
+<!DOCTYPE html><html><head><title>Python Iterators</title><script src='scripts/index.js'></script></head><body><h1>Python Iterators</h1><hr/>
+
+<p>In a previous sections, we saw loops on lists, tuples, etc.</p><pre><code class='python'>for element in (1, 2, 3):
+     print(element)</code></pre><p>Python does not limit these iterations to its built-in collection types. Any class that implements the required methods can be used as an iterable. For example, you want to iterate over the first n elements of Fibonacci series, you can create a simple iterator for that:</p><pre><code class='python'>class Fib:
+     def __init__(self, n):
+         self.max = n
+         self.last = 0
+         self.secondlast = 0
+
+    def __iter__(self):
+         return self
+
+    def __next__(self):
+         if self.last:
+             self.secondlast, self.last = self.last, self.last + self.secondlast
+         else:
+             self.last = 1
+         if self.last > self.max:
+             raise StopIteration
+         return self.last
+
+for x in Fib(100):
+     print(x)</code></pre><p>In fact, you need not implement the next method in the object that you are working with. All you need is the iter() method. This method should return an object which implements the next()</p><pre><code class='python'>def fib(n):
+     i, j = 0, 1
+     while j <= n:
+         yield(j)
+         i, j = j, i+j
+
+for x in Fib(100):
+     print(x)</code></pre><p>This is all you need! Note that keyword 'yield'. It is not return. The method does not return anything. It yields one value at a time. Of course, internally this translates to an iterator of some sort. But, the code certainly looks much better and much easier to manage. Since we have lesser script, it means there is lesser effort on interpretation and more of the C code doing the job. Naturally the performance is better.</p><h2>Generator Expressions</h2><hr/><p>The folks who made Python were not satisfied with simple Generators. They wanted to go one step further. Why do we have to create a new class or method for something that can be done by just one line of code? Generator expressions do just that! Naturally they are not as versatile as iterators and generators. But there are times when we really do not need all that.</p><p>For example, if you want the list of first 10 cubes, you just need a single line of code!</p><pre><code class='python'>print([x**3 for x in range(10)])</code></pre>
+
+</body><script>loadPageFormat();</script></script></html>

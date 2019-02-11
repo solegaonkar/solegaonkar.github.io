@@ -1,0 +1,18 @@
+<!DOCTYPE html><html><head><title>SVM with ScikitLearn</title><script src='scripts/index.js'></script></head><body><h1>SVM with ScikitLearn</h1><hr/>
+
+<p>Support Vector Machine (SVM) is a classification technique. It tries to geometrically divide the data available. If the input data has N features, the data is plotted as points in an N dimensional space. Then, it identifies an N-1 dimensional structure that could separate the groups. The good separation is one which has maximum distance from the two groups. The distance from the group could be identified in various different forms - the distance from the closest points or the distance from the center, or mean of all distances, etc. That would depend upon the kind of data.</p><p>In effect, this complements the Nearest Neighbor algorithm. Problems that are easier with Nearest Neighbor are difficult with the SVM and vice-versa.</p><h2>Implementation</h2><hr/><p>Python implementation for SVM is quite simple with the SciKitLearn. We start with importing the required libraries</p><pre><code class='python'>from sklearn.datasets import load_iris
+from sklearn import svm
+from sklearn.model_selection import train_test_split</code></pre><p>Then we get the Cataract / Iris data from the builtin datasets of ScikitLearn</p><pre><code class='python'>iris = load_iris()
+X_train, X_test, Y_train, Y_test = train_test_split(iris.data, iris.target, stratify=iris.target, random_state=50)</code></pre><p>Next step is to instantiate a model and train it.</p><pre><code class='python'>model = svm.SVC()
+model.fit(X_train, Y_train)
+...
+SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+  decision_function_shape='ovr', degree=3, gamma='auto', kernel='rbf',
+  max_iter=-1, probability=False, random_state=None, shrinking=True,
+  tol=0.001, verbose=False)</code></pre><p>We can then check up the efficiency of the model trainied</p><pre><code class='python'>model.score(X_train, Y_train)
+model.score(X_test, Y_test)
+...
+0.9821428571428571
+0.97368421052631582</code></pre><p>This is a good model.</p><p>But things may not always be so simple. If the features are not well defined, we may not have have a good plane passing through them. In that case, the scores would be very bad in spite of any tuning. In such a case, we have to rework the features to make sure the data gets segregated properly. Or if that is impossible, we might have to look for another algorithm. Hence it is important to have a good idea about the data we have.</p>
+
+</body><script>loadPageFormat();</script></script></html>

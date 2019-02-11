@@ -1,0 +1,38 @@
+<!DOCTYPE html><html><head><title>Code Flow</title><script src='scripts/index.js'></script></head><body><h1>Code Flow</h1><hr/>
+
+<p>Programming is all about data and decisions. In the above section, we saw a few ways data can be stored an processed in Python. Now, let us check out how decisions can be made, how code can be made to flow from one line to another. Then we will see a small code snippet to demonstrate basics of code flow.</p><h2>Indentation</h2><hr/><p>One major point where Python improves over most other languages is that it forces the developers to write readable code. It forces developers to indent the code; making it more readable. There are some developers who just have to write unreadable code - and they do find ways around Python as well.</p><p>Python does not use the curly braces {. . .} to define a block of code. A block of code is defined by its indentation. Consider the two blocks of code below:</p><pre><code class='python'>a = 0
+while a&lt;10:
+     a = a+1
+     print(a)
+
+a = 0
+while a&lt;10:
+     a = a+1
+
+print(a)</code></pre><p>They show a typical while loop in Python. Note the ':' after the condition, followed by code that is indented. In the first block, both lines of code are indented, while the second block has print(a) outside the block. That made a big difference to the code flow. The print(a) when indented, was considered as a part of the while loop - hence executed 10 times. But, the same when not indented, is executed only once at the end of the loop.</p><p>This holds true for any block of code - if / elif / else / for / while / def (function) / class - anything that is appropriately indented is part of the block. Else, it is not.</p><p>Python does not insist on any specifics about space/tab indentation, number of spaces, etc. But the convention - that everyone follows - dictates that it should be 4 spaces.</p><p>I am not going to bore you (and myself) with the details of if / elif / else / while / for... We know them too well already. There are some subtle improvements in Python and we will see them as we go. Suffices here to say - Python provides for them. We will start with syntax of the basics and then move further.</p><p>I plan to just brush through the basics and jump to something more interesting. The code snippet below covers the basics of control flow. Check it out on your IDE!</p><h2>Example</h2><hr/><pre><code class='python'># Define an empty list
+primes = []
+
+# Define an empty set / map
+divisors = {}
+
+# Loop through all the numbers from 2 to 100.
+for n in range(2, 100):
+     divisors[n] = []
+     # Loop through all values in list of primes
+     for p in primes:
+         # Break out of the loop if the number is
+         # divisible by any of the primes
+         if (not(n % p)):
+             divisors[n].append(p)
+
+     # This else block will be executed only if the
+     # above for loop exits normally without a break
+     # - implying that the number is prime.
+     else:
+         primes.append(n)
+
+# Print the list of prime numbers and divisors
+print(primes)
+print(divisors)</code></pre><p>That shows you a list of prime numbers as well as the list of all numbers from 2-100 with their divisors. It was achieved in Python with just a few lines of code!</p>
+
+</body><script>loadPageFormat();</script></script></html>

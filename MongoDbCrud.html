@@ -1,0 +1,35 @@
+<!DOCTYPE html><html><head><title>CRUD with MongoDB</title><script src='scripts/index.js'></script></head><body><h1>CRUD with MongoDB</h1><hr/>
+
+<p>MongoDB comes with a command shell that can be used to connect to the database and run database commands. The shell can be started using the simple command - "mongo". If you are on the same system where he MongoDB is running, that is all you need to connect to the MongoDB server. It will open the mongo shell where you can type</p><p>Before you start working, you need to connect to a particular database on the server. You can do it with the "use" command.</p><pre><code class='python'>use test</code></pre><p>This will connect you to the test database. Note that the commands in MongoDB shell are self-fulfilling by default. That is, they will generate the referred objects if they do not exist. In this case, if the test database does not exist, it will be created, instead of giving a "database not found" error. This can also get you into trouble when you erroneously type a wrong name. MongoDB provides ways to avoid that. We will check those down the line.</p><p>Let us now look at the standard CRUD operations that any normal database provides:</p><h3>Insert</h3><hr/><p>Now that we have connected to the test database, we can insert a document into the collection called blogs.</p><pre><code class='python'>>db.blog.insert({ "title" : "NoSQL Database"})
+WriteResult({ "nInserted" : 1 })
+
+>db.blog.insert({ "title" : "MongoDB"})
+WriteResult({ "nInserted" : 1 })
+
+>db.blog.insert({ "title" : "Big Data"})
+WriteResult({ "nInserted" : 1 })</code></pre><p>Again, the collection need not exist before we fire the insert command. MongoDB handles that for us. The insert command returns an object - WriteResult({ "nInserted" : 1 }) - that contains the status of the operation.</p><h3>Find</h3><hr/><p>We can read records from the database using the find command.</p><pre><code class='python'>>db.blog.find()
+{ "_id" : ObjectId("59b79bc90426610fcc7125ef"), "title" : "NoSQL Database" }
+{ "_id" : ObjectId("59b79bd50426610fcc7125f0"), "title" : "MongoDB" }
+{ "_id" : ObjectId("59b79bdc0426610fcc7125f1"), "title" : "Big Data" }</code></pre><p>Note that there is an additional field _id that the database generates by itself. We also have a choice to add it manually. Both approaches have their own pros and cons. We will have a look into those when we take up database design. When we find, we can also narrow the output using a kind of query. That helps us locate the exact record that we are looking for.</p><pre><code class='python'>>db.blog.find({"title" : "Big Data"})
+{ "_id" : ObjectId("59b79bdc0426610fcc7125f1"), "title" : "Big Data" }</code></pre><p>You can also use inequalities for querying. For example:</p><pre><code class='python'>>db.blog.find({"title" : {$gt : "Big Data"}})
+{ "_id" : ObjectId("59b79bc90426610fcc7125ef"), "title" : "NoSQL Database" }
+{ "_id" : ObjectId("59b79bd50426610fcc7125f0"), "title" : "MongoDB" }</code></pre><p>MongoDB also provides for various other features like query combinations, sorting, cursors, etc.</p><h3>Update</h3><hr/><pre><code class='python'>>db.blog.update(
+... {"title" : "MongoDB"},
+... {
+...    {$set : {"description":  "Introduction to MongoDB" } }
+... }
+... )
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+>db.blog.find()
+{ "_id" : ObjectId("59b79bc90426610fcc7125ef"), "title" : "NoSQL Database" }
+{ "_id" : ObjectId("59b79bdc0426610fcc7125f1"), "title" : "Big Data" }
+{ "_id" : ObjectId("59b79bd50426610fcc7125f0"), "title" : "MongoDB", "Introduction to MongoDB"}</code></pre><p>The update() command takes two arguments - the criteria and the update. The WriteResult object shows that only record was updated. The db.blog.find() confirms that.</p><h3>Remove</h3><hr/><pre><code class='python'>>db.blog.remove({"title" : "Big Data"})
+WriteResult({ "nRemoved" : 1 })
+
+>db.blog.find()
+{ "_id" : ObjectId("59b79bc90426610fcc7125ef"), "title" : "NoSQL Database" }
+{ "_id" : ObjectId("59b79bdc0426610fcc7125f1"), "title" : "Big Data" }
+{ "_id" : ObjectId("59b79bd50426610fcc7125f0"), "title" : "MongoDB", "Introduction to MongoDB"}</code></pre><p>That was a brief introduction to the MongoDB database. Of course there is a lot more to MongoDB than just these petty CRUD operations. The following blogs contain details of other facets of MongoDB.</p>
+
+</body><script>loadPageFormat();</script></script></html>

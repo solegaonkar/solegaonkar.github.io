@@ -1,0 +1,13 @@
+<!DOCTYPE html><html><head><title>Neural Networks with ScikitLearn</title><script src='scripts/index.js'></script></head><body><h1>Neural Networks with ScikitLearn</h1><hr/>
+
+<p>Neural Networks provide infinite possibilities for holding complex models with extreme precision. We have higher libraries like Tensorflow and Pytorch that provide high performance implementations specialized for different architectures of neural networks. But, Scikitlearn does provide us with a clean and simple implementations for the basic models.</p><h2>Implementation</h2><hr/><p>A simple, connected and unidirectional neural network model is defined by the number of layers and the number of perceptrons in each individual layer. Scikit Learn is provides a basic implementation for the Neural Networks. In order to implement it in Python, we start with importing the libraries.</p><pre><code class='python'>from sklearn.datasets import load_breast_cancer
+from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import train_test_split</code></pre><p>Next, load the data set to train and test the network. As in the previous examples, we can use the dataset of breast cancer.</p><pre><code class='python'>cancer = load_breast_cancer()
+X_train, X_test, y_train, y_test = train_test_split(cancer.data, cancer.target, stratify=cancer.target, random_state=42)</code></pre><p>Now we can create an instance of the classifier and train it</p><pre><code class='python'>clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
+clf.fit(X_train, y_train)</code></pre><p>With this training, we can check how well our model works</p><pre><code class='python'>print('Accuracy on the training subset: {:.3f}'.format(clf.score(X_train, y_train)))
+...
+Accuracy on the training subset: 0.939</code></pre><pre><code class='python'>print('Accuracy on the training subset: {:.3f}'.format(clf.score(X_test, y_test)))
+...
+Accuracy on the training subset: 0.944</code></pre><p>That is a decent performance. We can try playing around with the structure of the network, to get better implementations.</p><p>ScikitLearn was good to demonstrate small examples. But it does not perform well enough to be used in bigger Neural Networks. Tensorflow and other such libraries are used to handle Deep Neural Networks.</p>
+
+</body><script>loadPageFormat();</script></script></html>

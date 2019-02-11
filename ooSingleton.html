@@ -1,0 +1,20 @@
+<!DOCTYPE html><html><head><title>Singleton Pattern</title><script src='scripts/index.js'></script></head><body><h1>Singleton Pattern</h1><hr/>
+
+<p>This is one of the simplest of the Creation Patterns. Singleton is a class that has only one instance - and cannot have more instances. This is useful when we want to contain a consistent functionality for the entire application.</p><p>Most programming languages do not provide a direct support for this functionality. Any code with visibility to a class can instantiate it to get an object - using the new operator. For ensuring that a class has only one instance, we have to ensure that nobody can invoke the constructor. To ensure this, the constructor has to be a private member of the class. </p><p>With this in place, we can provide a method that helps a caller with the instance of the class. This method has to make sure that it allows only one instance and returns the same instance if there are multiple calls to the method. Often this needs to be thread safe.</p><p>Thus, the getInstance() is a public static method that returns the only object of the class. Now the question is, when is  this single object created? Typically there are two implementations for this - eager and lazy. The eager implementation instantiates the object much before it is required - perhaps in a static block. The lazy implementation does this only on the first call to the getInstance() method.</p>
+<h2>Implementation</h2><hr/><p>Let us now look at how the Singleton pattern in implemented in code:</p><pre><code class='java'>class Singleton {
+	private static Singleton instance = new Singleton();
+
+	private Singleton() {
+		System.out.println("Singleton(): Initializing Instance");
+	}
+
+	public static Singleton getInstance() {    
+		return instance;
+	}
+
+	public void doSomething() {
+		System.out.println("doSomething(): Singleton does something!");
+	}
+}</code></pre>
+
+</body><script>loadPageFormat();</script></script></html>

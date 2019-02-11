@@ -1,0 +1,13 @@
+<!DOCTYPE html><html><head><title>Low Variance Filter</title><script src='scripts/index.js'></script></head><body><h1>Low Variance Filter</h1><hr/>
+
+<p>Low Variance Filter is a useful dimensionality reduction algorithm. To understand it conceptually, we can look at the worldly equivalent of  this concept. In raw words, your opinion counts only if it changes. It you are too consistent, nobody needs to ask your choice! The same holds for input parameters. An input parameter is important only if its value changes significantly. If all the data we have shows the same value of a particular parameter, we really do not need to consider it.</p><p>A more formal way of doing this is to use the low variance filter. The variance is a statistical measure of the amount of variation in the given variable. If the variance is too low, it means that it does not change much and hence it can be ignored.</p><h3>Python Code</h3><hr/><p>We can implement this in Python using the method var(). But, before we start, we need to pull out the numeric fields in the data set. We can have unchanging non-numeric parameters; but the variance filter makes sense only for the numeric data.</p><pre><code class='python'>numeric = train[['Numeric_1', 'Numeric_2', 'Numeric_3', 'Numeric_4']]
+variance = numeric.var()
+numeric_columns = numeric.columns
+
+c = [ ]
+
+for i in range(0, len(variance)):
+  if variance[i]>=10: 
+    c.append(numeric[i+1])</code></pre><p>This selects only the columns that have a variance higher than 10. This threshold has to be chosen based on the problem at hand.</p>
+
+</body><script>loadPageFormat();</script></script></html>

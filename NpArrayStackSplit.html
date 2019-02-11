@@ -1,0 +1,49 @@
+<!DOCTYPE html><html><head><title>Stack &amp; Split</title><script src='scripts/index.js'></script></head><body><h1>Stack &amp; Split</h1><hr/>
+
+<p>As we work with data in NumPy arrays, we often need to club two data sets, or break a given data set into multiple parts. We could do this by indexing and slicing the arrays. But NumPy provides many more efficient ways of doing the job.</p><h3>Stacking Two Arrays</h3><hr/><p>To check out the functionality for stacking, let us use these two arrays:</p><pre><code class='python'>&gt;&gt;&gt; a = np.floor(10*np.random.random((2,2)))
+&gt;&gt;&gt; a
+array([[ 4.,  2.],
+       [ 3.,  6.]])
+&gt;&gt;&gt; b = np.floor(10*np.random.random((2,2)))
+&gt;&gt;&gt; b
+array([[ 2.,  8.],
+       [ 2.,  1.]])</code></pre><p>NumPy provides us two different methods for stacking the arrays - horizontal stacking and vertical stacking. To stack them horizontally, we can use hstack</p><pre><code class='python'>&gt;&gt;&gt; np.hstack((a,b))
+array([[ 4.,  2.,  2.,  8.],
+       [ 3.,  6.,  2.,  1.]])</code></pre><p>Here, the size of each row increases. If we want to increase the number of rows - append along columns, we can use vstack</p><pre><code class='python'>&gt;&gt;&gt; np.vstack((a,b))
+array([[ 4., 28.],
+       [ 3.,  6.],
+       [ 2.,  8.],
+       [ 2.,  1.]])</code></pre><p>Note that hstack and vstack work on two dimensions only. If the array has more dimensions, it will consider the first two.</p><pre><code class='python'>&gt;&gt;&gt; np.vstack((np.floor(10*np.random.random((2,2,2))), np.floor(10*np.random.random((2,2,2)))))
+array([[[ 2.,  7.],
+        [ 8.,  3.]],
+
+       [[ 9.,  3.],
+        [ 4.,  0.]],
+
+       [[ 7.,  4.],
+        [ 1.,  4.]],
+
+       [[ 9.,  6.],
+        [ 0.,  2.]]])</code></pre><p>Note here that the innermost dimension is not touched.</p><h3>Splitting Arrays</h3><hr/><p>Just as we need to stack arrays together, we also need to split the data into multiple arrays. NumPy provides very useful functionality for splitting arrays.</p><pre><code class='python'>&gt;&gt;&gt; a = np.floor(10*np.random.random((2,12)))
+&gt;&gt;&gt; a
+array([[ 4.,  0.,  2.,  9.,  2.,  5.,  0.,  1.,  4.,  6.,  1.,  6.],
+       [ 0.,  1.,  6.,  4.,  0.,  2.,  7.,  1.,  0.,  9.,  7.,  8.]])</code></pre><p>We can split it along the rows using the hsplit function. Let's try out an example.</p><pre><code class='python'>&gt;&gt;&gt; np.hsplit(a,3)   # Split a into 3
+[array([[ 4.,  0.,  2.,  9.],
+        [ 0.,  1.,  6.,  4.]]), array([[ 2.,  5.,  0.,  1.],
+        [ 0.,  2.,  7.,  1.]]), array([[ 4.,  6.,  1.,  6.],
+        [ 0.,  9.,  7.,  8.]])]</code></pre><p>Note that this generated a Python array of 3 NumPy arrays. Each inner array is 4x2. Thus, the single array of 12x2 was split into 3 arrays of 4x2.</p><p>We can also use vsplit to split it along  the columns:</p><pre><code class='python'>&gt;&gt;&gt; np.vsplit(a,2)   # Split a into 2
+[array([[ 4.,  0.,  2.,  9.,  2.,  5.,  0.,  1.,  4.,  6.,  1.,  6.]]),
+ array([[ 0.,  1.,  6.,  4.,  0.,  2.,  7.,  1.,  0.,  9.,  7.,  8.]])]</code></pre><p>NumPy also allows us to specify the exact column where we want to split it (instead of specifying the number of pieces required).</p><pre><code class='python'>&gt;&gt;&gt; np.hsplit(a,(3,4))   # Split a after the third and the fourth column
+[array([[ 4.,  0.,  2.],
+        [ 0.,  1.,  6.]]), array([[ 9.],
+        [ 4.]]), array([[ 2.,  5.,  0.,  1.,  4.,  6.,  1.,  6.],
+        [ 0.,  2.,  7.,  1.,  0.,  9.,  7.,  8.]])]</code></pre><p>Note here, that it generated three arrays of unequal shapes. As specified in the input, the first array was built with data up to third column. The second array had data between the third and fourth columns (only the fourth column). And the third array had the remaining data.</p><p>We can do the same with vsplit</p><pre><code class='python'>&gt;&gt;&gt; np.hsplit(a.reshape(3,8), (2,3))
+[array([[ 4.,  0.],
+        [ 4.,  6.],
+        [ 0.,  2.]]), array([[ 2.],
+        [ 1.],
+        [ 7.]]), array([[ 9.,  2.,  5.,  0.,  1.],
+        [ 6.,  0.,  1.,  6.,  4.],
+        [ 1.,  0.,  9.,  7.,  8.]])]</code></pre>
+
+</body><script>loadPageFormat();</script></script></html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html><html><head><title>Syntax and Datatypes</title><script src='scripts/index.js'></script></head><body><h1>Syntax and Datatypes</h1><hr/>
+
+<p>Python provides for most normal functionality like data types and normal code flow structures that any normal programming language can provide.</p><h2>Comments</h2><hr/><p>Comments are the most important (and the most ignored) part of any programming language. Everyone knows they are required. Everyone knows why they are required. Everyone curses the developer when they see a code without comments. But, very few are gracious enough to comment their own code. For these generous minded developers, Python provides a simple syntax for adding comments to their code - #. Any text that follows a # - till the end of line, is ignored by the interpreter - as a comment. A # inside quotes is treated simply as a part of the string, and hence does not mark any comment.</p><h2>Numbers</h2><hr/><p>Computing started with numbers. Today, it has covered several data types. But, numbers still form a major chunk of tasks. Python provides for different types of numbers. It also provides huge functionality for processing them. We have integers, floats, Try out the below code to check out the various numeric functions:</p><pre><code class='python'>a = 10
+b = 3
+c = a + b       # 13
+print(c)
+
+c = a - b       # 7
+print(c)
+
+c = a * b       # 30
+print(c)
+
+c = a / b       # 3.3333333333333335
+print(c)
+
+c = a // b      # 3
+print(c)
+
+c = a % b       # 1
+print(c)
+
+c = a ** b      # 1000
+print(c)</code></pre><p>In addition to the integer and floating point numbers described above, Python also supports Decimal / Fraction / Complex numbers - that provide a lot more functionality. We will have a look at them later.</p><h2>Strings</h2><hr/><p>The other most commonly used data type is that of strings. Python provides for a huge functionality to work with and manipulate strings. Strings can be defined in single quotes as well as in double quotes. Special characters need to be escaped with a '\'. There is no particular difference between a string defined in single quotes and one defined in double quotes. Naturally, they have to be consistent and a string defined in single quotes should escape a single quote character within the string and a double quoted string should escape a double quote character in the string. Python defines several useful functions for Strings. Check out the code below</p><pre><code class='python'>s = 'Single quoted String'
+print(s)
+
+s = "Double quoted String"
+print(s)
+
+s = 'Single quoted string needs to escape \' character not "'
+print(s)
+
+s = "Double quoted string needs to escape \" character not '"
+print(s)
+
+s = r'use r if you \\ do not like the escape \ '
+print(s)
+
+s = """\
+A
+Multi
+Line
+String
+"""
+print(s)</code></pre><p>A feature rich language like Python naturally has the basic functionality to split / join / append / substring, and a lot more that you can explore with the auto suggest in any sensible IDE, or by looking up the manuals. Try the below code to check out the basics.</p><pre><code class='python'>s = "lEaRnInG"
+
+# Append
+s = s.__add__(" PyThOn")
+#split
+print(s.split())
+print(s.split(sep="t"))
+
+# Splicing
+print(s[:])
+print(s[1:])
+print(s[1:-1])
+print(s[5:-5])
+print(s[16:0])
+
+# Casing
+print(s.lower())
+print(s.upper())
+print(s.title())</code></pre><h2>Booleans</h2><hr/><p>Booleans are logical variables - used in decision making. Python defines two values True and False for Boolean variables. Although these two values are predefined in the language, Python is a bit loose about Booleans. Internally, True is just the number 1 and False is the number 0. You can verify these by adding True + True, or if you are adventurous, by dividing True/False - Don't blame me for the exception! Most other datatypes can be used in a 'Boolean context' - and they have a criteria for when they should be considered False and when True. Any non-zero number is True. Any non-empty string is True, and so on.</p>
+
+</body><script>loadPageFormat();</script></script></html>

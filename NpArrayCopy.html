@@ -1,0 +1,39 @@
+<!DOCTYPE html><html><head><title>Views &amp; Copies</title><script src='scripts/index.js'></script></head><body><h1>Views &amp; Copies</h1><hr/>
+
+<p>When we modify data, we should carefully look at what we want to modify and what we end up modifying. Do we want to modify the original data or a copy? We have use-cases for both, and NumPy provides for both. Hence it is important to understand what is a copy and what is just another view of the original data.</p><p>There are times when we just need another reference, sometimes we need a shallow copy so that we can manipulate the view on the same data. And there are times when we need a fresh new copy, so that we can mess with it without troubling the main data.</p><p>Apart from knowing how to do it, it is also important that we keep memory and processor implications in mind.</p><h3>Assignment</h3><hr/><p>Simple assignment does not make a copy of the object. Assignment only creates a copy of reference to the same object.</p><p>Consider the example below:</p><pre><code class='python'>&gt;&gt;&gt; a = np.arange(12)
+&gt;&gt;&gt; b = a            # no new object is created</code></pre><p>Here b and a are not different. Both refer to the same object.</p><pre><code class='python'>&gt;&gt;&gt; b is a           # a and b are two names for the same ndarray object
+True</code></pre><p>Since they refer to the same object, modification to one of them will be seen in the other. Let's check this out.</p><pre><code class='python'>&gt;&gt;&gt; b.shape = 3,4    # changes the shape of a
+&gt;&gt;&gt; a.shape
+(3, 4)</code></pre><h3>Function Parameters</h3><hr/><p>This is an important aspect to note in any language. When we pass a parameter to a function, some languages make a copy of the variable being passed in, while others just pass a reference. Python belongs to the latter. Any mutable parameter is passed as a reference - without creating a copy. Thus, any update to the variable within the function will also affect the parameter.</p><p>Let's check this out. First define a function that prints the object id - the unique object identifier.</p><pre><code class='python'>&gt;&gt;&gt; def f(x):
+...     print(id(x))
+...</code></pre><p>Now we can compare the id of the parameter inside and outside the function. </p><pre><code class='python'>&gt;&gt;&gt; id(a)                           # id is a unique identifier of an object
+2196416171104
+&gt;&gt;&gt; f(a)
+2196416171104</code></pre><p>The id's match - that means the same object is seen inside and outside the function.</p><h3>View or Shallow Copy</h3><hr/><p>NumPy has a concept of Views. View of an array is another object that is created out of the array using the method view().</p><pre><code class='python'>&gt;&gt;&gt; c = a.view()</code></pre><p>This is not an assignment. c refers to a different object.</p><pre><code class='python'>&gt;&gt;&gt; c is a
+False</code></pre><p>In fact, c contains a reference to a</p><pre><code class='python'>&gt;&gt;&gt; c.base is a                        # c is a view of the data owned by a
+True</code></pre><p>All the array manipulation methods work equally well on the views. If we want to identify if the given object is an array or a view, we can check out the flags:</p><pre><code class='python'>&gt;&gt;&gt; c.flags.owndata
+False
+&gt;&gt;&gt; a.flags.owndata
+True</code></pre><p>Both a and c refer to the same data. But other attributes like shape are local to each.</p><pre><code class='python'>&gt;&gt;&gt; c.shape = 2,6                      # a's shape doesn't change
+&gt;&gt;&gt; a.shape
+(3, 4)</code></pre><p>But since the data shared between them, changing the data of one will impact the other as well.</p><pre><code class='python'>&gt;&gt;&gt; c[0,4] = 1234                      # a's data changes
+&gt;&gt;&gt; a
+array([[   0,    1,    2,    3],
+       [1234,    5,    6,    7],
+       [   8,    9,   10,   11]])</code></pre><p>Note that since we had changed the shape of c, the c[0,4] field shows up as a[1,0]. But both refer to the same data.</p><p>Similarly, when we slice an array, we effectively get a view to it.</p><pre><code class='python'>&gt;&gt;&gt; s = a[ : , 1:3]     # spaces added for clarity; could also be written "s = a[:,1:3]"
+&gt;&gt;&gt; s[:] = 10           # s[:] is a view of s. Note the difference between s=10 and s[:]=10
+&gt;&gt;&gt; a
+array([[   0,   10,   10,    3],
+       [1234,   10,   10,    7],
+       [   8,   10,   10,   11]])</code></pre><p>Thus, a view gives us another object that refers to the same base data. This is also called a shallow copy.</p><h3>Deep Copy</h3><hr/><p>Finally, if we want a deep copy, NumPy provides a method copy(). </p><pre><code class='python'>&gt;&gt;&gt; d = a.copy()                          # a new array object with new data is created</code></pre><p>This creates another array with a copy of the base data.</p><pre><code class='python'>&gt;&gt;&gt; d is a
+False</code></pre><p>Copy does not return a view. It is a real array object with its own data.</p><pre><code class='python'>&gt;&gt;&gt; d.flags.owndata
+True</code></pre><p>Now let us try to modify the data in d</p><pre><code class='python'>&gt;&gt;&gt; d[0,0] = 9999
+&gt;&gt;&gt; d
+array([[9999 ,   10,   10,    3],
+       [1234,   10,   10,    7],
+       [   8,   10,   10,   11]])</code></pre><p>But this does not affect the data in a</p><pre><code class='python'>&gt;&gt;&gt; a
+array([[   0,   10,   10,    3],
+       [1234,   10,   10,    7],
+       [   8,   10,   10,   11]])</code></pre><p>That is because d has no relation with a.</p>
+
+</body><script>loadPageFormat();</script></script></html>

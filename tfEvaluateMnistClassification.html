@@ -1,0 +1,18 @@
+<!DOCTYPE html><html><head><title>Evaluate the Model</title><script src='scripts/index.js'></script></head><body><h1>Evaluate the Model</h1><hr/>
+
+<p>Now that we have a trained model, we need to evaluate how good it is. The first simple step is to check out using TensorFlow's own evaluation methods.</p><pre><code class='python'>model.evaluate(augmented_images,augmented_labels)
+...
+300000/300000 [==============================] - 7s 25us/step
+[0.032485380109701076, 0.9895766666666667]</code></pre><p>That is quite good. Considering the amount of data we had, this is a good accuracy. But, this test is not enough. Very high accuracy could mean overfitting as well. So we must check it with the test data.</p><pre><code class='python'>model.evaluate(test_images,test_labels)
+...
+10000/10000 [==============================] - 0s 28us/step
+[0.062173529548419176, 0.9834]</code></pre><p>One can notice that the accuracy is slightly less in the test data. This means slight overfitting. But that is not so bad. So we can live with it for now. In a real life example, depending upon the requirement, one could try to tweak the model shape and other hyperparameters to get better results.</p><h3>Sampling</h3><hr/><p>That may not give us all the confidence we need. We can manually check a few samples to see how our model has performed.</p><p>First, create the prediction for all the test images.</p><pre><code class='python'>prediction = model.predict(test_images)</code></pre><p>Now, prediction is an array with output for all the images in the test set.</p><pre><code class='python'>prediction[0]
+...
+array([4.2578703e-14, 3.1028571e-13, 8.5658702e-10, 9.5759439e-08,
+       1.0654272e-18, 2.6685609e-10, 7.1893772e-19, 9.9999988e-01,
+       1.4853034e-10, 1.4370636e-08], dtype=float32)</code></pre><p>We can see that each element in this set is an array of 10 - that shows the probability that the input image belongs to a given label. When we check for the zeroth element in the prediction set, we can see that the probability for all the elements is very low except for the element 7 - that is almost 1. Hence, for the image 0, one would predict 7.</p><p>Let us now see what the test image looks like. Before that, we need to reshape the images array (remember we had made a single dimensional array for building the model?</p><pre><code class='python'>prediction_images = test_images.reshape(10000,28,28)</code></pre><p>Now let us check the zeroth element</p><pre><code class='python'>plt.figure()
+plt.imshow(p_images[0])
+plt.colorbar()
+plt.grid(False)</code></pre><div class='center'><img src='img/tf_mnist_7.png' /></div><p>This is 7 indeed!</p><p>Having one correct answer is certainly not enough to verify the accuracy of the model. But, one point that we can check at this point is the values in the prediction[0] array. The value in element 7 is far more than the other values. That means, the model is absolutely certain about the outcome. There is no doubt or confusion. This is an important symptom of a good model.</p>
+
+</body><script>loadPageFormat();</script></script></html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html><html><head><title>Data Augmentation</title><script src='scripts/index.js'></script></head><body><h1>Data Augmentation</h1><hr/>
+
+<p>The resources we have are always less than what we need. Data is not an exception. To achieve better and better outcomes, we need a lot more than what we have. And we can generate more data from what is available to us - using our knowledge about the data. For example, we know that the number does not change if the entire image is shifted a pixel on either side.</p><p>Thus, each image in the input set can generate four more images by shifting by one pixel on each side. The images appear almost unchanged to our eye. But for the neural network model, it is a new input set. This simple information can give us 5 times as much data. Let's do that.</p><pre><code class='python'>A = np.delete(train_images, np.s_[:28:], 1)
+A = np.insert(A, [A.shape[1]] * 28, [0]*28, 1)
+augmented_images = np.append(train_images, A, axis=0)
+augmented_labels = np.append(train_labels, train_labels, axis=0)</code></pre><pre><code class='python'>A = np.delete(train_images, np.s_[-28:], 1)
+A = np.insert(A, [0] * 28, [0] * 28, 1)
+augmented_images = np.append(augmented_images, A, axis=0)
+augmented_labels = np.append(augmented_labels, train_labels, axis=0)</code></pre><pre><code class='python'>A = np.delete(train_images, np.s_[-2:], 1)
+A = np.insert(A, [0, 0], [0, 0], 1)
+augmented_images = np.append(augmented_images, A, axis=0)
+augmented_labels = np.append(augmented_labels, train_labels, axis=0)</code></pre><pre><code class='python'>A = np.delete(train_images, np.s_[:2:], 1)
+A = np.insert(A, [A.shape[1],A.shape[1]], [0, 0], 1)
+augmented_images = np.append(augmented_images, A, axis=0)
+augmented_labels = np.append(augmented_labels, train_labels, axis=0)</code></pre><p>Don't worry if your are not able to understand the code above. Refer to the NumPy Blogs for details of working with NumPy arrays.</p><p>Essentially, this code just deletes the cells from one side of the image and inserts 0's on the opposite side. It does it from all four sides of the each image in the training data, and then appends it to the new array called augmented_images. Along with that, it also builds the augmented_lables array.</p><p>Now, we can use the augmented_images and augmented_labels instead of train_images and train_labels for training our model. But, wait a minute. If we think over this, the data is not random anymore. We have a huge chunk of data with images in the center followed by a huge chunk with images shifted in each direction. Such data does not create good models. We need to improve this by shuffling the data well.</p><p>But this is not so simple. Now, we have an array of images an an array of labels. We have to shuffle either of them. But, the correspondence should not be lost. After the shuffle, an image of 5 should point to the label 5!</p><p>NumPy does provide us an elegant way of doing this.</p><pre><code class='python'>train_data = np.c_[augmented_images.reshape(len(augmented_images), -1), augmented_labels.reshape(len(augmented_labels), -1)]
+augmented_images = train_data[:, :augmented_images.size//len(augmented_images)].reshape(augmented_images.shape)
+augmented_labels = train_data[:, augmented_images.size//len(augmented_images):].reshape(augmented_labels.shape)
+np.random.shuffle(train_data)</code></pre><p>Essentially, we combine the two into a single entity and then shuffle it in a way that the images and labels move together.</p>
+
+</body><script>loadPageFormat();</script></script></html>

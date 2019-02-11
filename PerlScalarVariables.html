@@ -1,0 +1,39 @@
+<!DOCTYPE html><html><head><title>Perl Scalar Variables</title><script src='scripts/index.js'></script></head><body><h1>Perl Scalar Variables</h1><hr/>
+
+
+<p>Perl does not explicitly define variable types. But, internally it manages two types of data - strings and numbers.</p><h3>Numbers</h3><hr/><p>A variable that is assigned a numeric value is a numeric variable.</p><pre><code class='perl'>$numer = 1;</code></pre><p>Perl does not restrict us to simple numbers. All these are valid numbers in Perl.</p><pre><code class='perl'>4
+3.2
+.23434234
+5.
+1_123_456
+10E2
+45e-4
+0xbeef
+012</code></pre><h3>Strings</h3><hr/><p>A sequence of characters in quotes is a string.</p><pre><code class='perl'>$string1 = "This is a string";
+$string2 = 'This is also a string";</code></pre><p>We can use single or double quotes for defining a string variable. There are some subtle differences in the way they are parsed. If a string is defined in double quotes, some values have a special meaning in the string. For example the new line \n or tab \t... also any variable within the string is parsed and its value is inserted instead. Single quote strings take everything literally. Except for the \' that is used to include a single quote inside a string marked by single quotes.</p><pre><code class='perl'>#!/bin/perl
+
+$c = 1;
+$string1 = "String with newline \n and also some variables \" $c\n";
+$string2 = 'String with newline \n and also some variables \\ \' $c\n';
+
+print string1;
+print string2;</code></pre><p>This generates the output:</p><pre>String with newline 
+ and also some variables " 1
+String with newline \n and also some variables \ ' $c\n</pre><p>Most programming language have a similar set of escape characters. The exhaustive list for Perl can be found in the <a href="https://perldoc.perl.org/perlrebackslash.html">documentation</a></p><h3>Concatenating strings</h3><hr/><p>Perl allows us to concatenate two strings to generate a new third string. The operator . is used for this. Check this script.</p><pre><code class='perl'>#!/bin/perl
+
+$string = "Hello" . " " . "World" . "\n";
+print($string);</code></pre><h3>Arithmetic Operations</h3><hr/><p>All arithmetic operations in Perl are floating point. Thus, 19/2 gives us 9.5 and not 9 as a Java/C developer would expect. If we really want 9, can can enforce the integer output using the int operator. This does not change the division. But just truncates the result to give an integer.</p><pre><code class='perl'>#!/bin/perl
+
+$x = 19/2;
+$y = int 12/2;
+print("$x $y\n");</code></pre><p>Perl includes most of the common operators that are used in other programming languages. They mean the same; so not elaborating too much.</p><h3>String - Number Conversion</h3><hr/><p>Perl does its best to help us with the conversion. If a variable is used in string context, it converts the variable into a string and if it is in a numeric context, it tries to get a number out of it. Most often this is quite intuitive. For example,</p><pre><code class='perl'>#!/bin/perl
+
+$x = "10";
+$y = "ten";
+$z = "5 hundred";
+
+print $x + 5;
+print $y + 5;
+print $z + 5;</code></pre><p>The first will give us 15 as one would expect. But what would you expect for the other two? This is less intuitive. When converting a string to a number, Perl starts scanning the string from the left edge until it sees numbers and stops when it sees anything else. Thus, in the first case, "ten" is evaluated as 0 while "5 hundred" is evaluated as 5. The second results in 10 and the third gives us 10.</p><h3>Boolean</h3><hr/><p>Perl does not have an explicit boolean variable. Strings and numbers are evaluated as true or false depending on their content. An empty string or the number 0 or an undefined variable evaluate to false. Anything else is true. This leads to an interesting situation. What if we assign a string "0" to a variable? Would that be a non empty string evaluating to true, or the number 0 evaluating to false.</p><p>This allows us to peep behind the curtains into the way Perl handles variables. "0" is a string hence true. It is converted to a number only when it is seen in a numeric context. Until then it is a number. Thus, "0" is true while 0 + "0" is false.</p><p>Such booleans are used for conditional evaluation and various control structures that Perl provides.</p>
+
+</body><script>loadPageFormat();</script></script></html>

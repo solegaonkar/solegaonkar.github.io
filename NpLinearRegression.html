@@ -1,0 +1,26 @@
+<!DOCTYPE html><html><head><title>NumPy - Linear Regression</title><script src='scripts/index.js'></script></head><body><h1>NumPy - Linear Regression</h1><hr/>
+
+<p>The open source community has provided us with a large number of libraries that can implement most of these algorithms in a couple of lines. But, in order to do some meaningful work, it is important to understand what's going on behind the curtains. With this in mind, let's try to implement a simple linear regression with NumPy</p><p>For this, we let us use the <a href="data/insurance.csv">insurance data</a> available from the open source data sets. This data is used to predict the medical expense of a person based on various standard parameters. Let us train our model based on this data.</p><h3>NumPy Implementation</h3><hr/><p>We can start with importing the required libraries. In this case, we work with numpy alone.</p><pre><code class='python'>import numpy as np</code></pre><p>Next, we import the data from the CSV file.</p><pre><code class='python'>insurance_data = np.genfromtxt("data/insurance.csv", delimiter=',', skip_header=1, usecols=[0,1,2,3,4,5,6])</code></pre><p>Let's shuffle this data to make sure it is distributed randomly.</p><pre><code class='python'>np.random.shuffle(insurance_data)</code></pre><p>Next, we define the test/train data:</p><pre><code class='python'>train_data = insurance_data[0:1200,]
+test_data = insurance_data[1201:,]
+train_X = train_data[:,0:6]
+train_y = train_data[:,6]
+test_X = test_data[:,0:6]
+test_y = test_data[:,6]</code></pre><p>Now that we have the data imported, let us define and initialize the model.</p><pre><code class='python'>W = np.zeros(train_X.shape[1])
+b = 0</code></pre><p>W is a matrix that defines the weights and b is the scalar that defines the offset. Given this, we can define the functions required to process the data. </p><p>Let us start with the core function that updates the weights based on the current values in one iteration.</p><pre><code class='python'>def update(learning_rate, X, y):
+    global W, b
+    # Forward Propagation
+    p = np.dot(X, W) + b
+    
+    # Backward Propagation
+    dW = np.dot(X.T, p-y) / X.shape[0]
+    db = np.sum(p-y) / X.shape[0]
+    W = W - dW * learning_rate
+    b = b - db * learning_rate</code></pre><p>With this method in place, we can go through the iterations of updating the model.</p><pre><code class='python'>for i in range(1000000):
+    update(0.0005, X, y)</code></pre><p>Note here, that we take the application through 1000000 iterations, with a learning rate of 0.0005. The number of iterations, learning rate, etc are hyper-parameters that have a heavy impact on the the convergence. Typically we try a couple of values on a smaller data sample and then shoot off once we are comfortable with its performance.</p><p>Now, we have trained the model and we hope we have good values in the weights W and b. Let us now test it.</p><pre><code class='python'>def test(X, y):
+    p = np.dot(X, W) + b
+    cost = np.sqrt(np.dot((y - p).T, (y - p))/np.dot(y.T, y))/X.shape[0]
+    print(cost)</code></pre><p>We can use this function to identify how well it works with the train and test data sets.</p><pre><code class='python'>>> test(train_X, train_y)
+0.00027975071577271036</code></pre><p>That looks quite good. The error is only 0.02%. Let us now see how it works with the test data</p><pre><code class='python'>>> test(test_X, test_y)
+0.0025231840061720944</code></pre><p>This is 0.2%. A clear case of overfitting. But 0.2% error is not bad either.</p><p>Note that we did all this calculation without any concern for the kind of data that was present in the CSV file. We have no idea about the meaning of any field in there. Some of the fields have very little variation, some have a huge variation. Some of  them are discrete and others are continuous. Without bothering about any of these, we have arrived to such an accurate result with just linear regression!</p><p>In order to improve this model, we can have a look into the data. Some columns need normalization. Some of them can be discarded. Such tweaks can help reduce the overfitting.</p>
+
+</body><script>loadPageFormat();</script></script></html>

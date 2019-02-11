@@ -1,0 +1,39 @@
+<!DOCTYPE html><html><head><title>Google Cloud Platform</title><script src='scripts/index.js'></script></head><body><h1>Google Cloud Platform</h1><hr/>
+
+<p>AWS provides us several services for solving machine learning problems on different levels. Starting with high performance EC2 instances and scalable SageMaker to specialized services like Textract, Comprehend, Deepracer, Greengrass and many more. AWS also provides ready to deploy services like Lex. Let us have a look at each of these.</p>
+
+<h4>Cloud Speech-to-Text</h4><hr/><p>Google Cloud Speech-to-Text enables developers to convert audio to text by applying powerful neural network models in an easy-to-use API. The API recognizes 120 languages and variants to support your global user base. We can enable voice command-and-control, transcribe audio from call centers, and more. It can process real-time streaming or prerecorded audio, using Google’s machine learning technology.</p><p>It provides a simple API for invoking the services to extract the text out of a simple audio file. Here is a simple Python script to do this.</p><pre><code class='python'>import io
+import os
+
+# Imports the Google Cloud client library
+from google.cloud import speech
+from google.cloud.speech import enums
+from google.cloud.speech import types
+
+# Instantiates a client
+client = speech.SpeechClient()
+
+# The name of the audio file to transcribe
+file_name = os.path.join(
+    os.path.dirname(__file__),
+    'resources',
+    'audio.raw')
+
+# Loads the audio into memory
+with io.open(file_name, 'rb') as audio_file:
+    content = audio_file.read()
+    audio = types.RecognitionAudio(content=content)
+
+config = types.RecognitionConfig(
+    encoding=enums.RecognitionConfig.AudioEncoding.LINEAR16,
+    sample_rate_hertz=16000,
+    language_code='en-US')
+
+# Detects speech in the audio file
+response = client.recognize(config, audio)
+
+for result in response.results:
+    print('Transcript: {}'.format(result.alternatives[0].transcript))</code></pre>
+
+
+</body><script>loadPageFormat();</script></script></html>

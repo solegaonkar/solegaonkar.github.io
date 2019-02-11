@@ -1,0 +1,49 @@
+<!DOCTYPE html><html><head><title>TensorFlow Code Example</title><script src='scripts/index.js'></script></head><body><h1>TensorFlow Code Example</h1><hr/>
+
+<p>To understand TensorFlow it is very important to understand the core concepts of Constants, Variables, Placeholders and Sessions. Let us now work out an example that can display all of these concepts at once.</p><ul><li>Ofcourse, we start by importing the TensorFlow module</li></ul><pre><code class='python'>import tensorflow as tf</code></pre><ul><li>Now, let us define a few Tensors. Here, t1 and t2 are constants, t3 is a placeholder and t4 is a variable.</li></ul><pre><code class='python'>t1 = tf.ones([4,5])
+t2 = tf.random_uniform([5,4], maxval = 4.0, seed = 2)
+t3 = tf.placeholder(tf.float32)
+t4 = tf.get_variable("t4", [4,4], initializer = tf.ones_initializer)</code></pre><p>Here, we define t1 as a Constant Tensor of size 4x5, with all the values set to 1. t2 is a Constant Tensor of size 5x4, with random values.</p><p>t3 is a placeholder with 0 dimensions - a single number with float32.</p><p>Along with this, we define a variable t4 of shape 4x4. The initializer is set to ones_initializer. That means, whenever we initialize the variable, its values will be set to 1. Note that this will happen only when we initialize the variable - not now.</p><ul><li>Next, we can define the Tensor expression</li></ul><pre><code class='python'>exp = tf.assign(t4, tf.matmul(t1,t2) * t3 + t4)</code></pre><p>This code takes a dot product of t1 and t2, multiplies it with the scalar t3 and then adds it to t4. The outcome of this is then assigned to t4. Thus, the value of t4 changes on every execution of this expression. Note that t3 is a placeholder, so we will have to provide the value of t3 when we want to process this expression.</p><p>Again, this code only defines the expression. It is not executed right away.</p><ul><li>With everything in place, we can now get the session and start working with the Tensors</li></ul><pre><code class='python'>with tf.Session() as sess:
+  sess.run(tf.global_variables_initializer())
+  print("Initialized variables\n----------------------------------------------")
+  print(t4.eval())
+
+  sess.run(exp, feed_dict = {t3:1})
+  print("\nAfter First Run\n--------------------------------------------------")
+  print(t4.eval())
+
+  sess.run(exp, feed_dict = {t3:1})
+  print("\nAfter Second Run\n-------------------------------------------------")
+  print(t4.eval())
+
+  sess.run(exp, feed_dict = {t3:1})
+  print("\nAfter Third Run\n--------------------------------------------------")
+  print(t4.eval())</code></pre><p>Here, we actually run the code. We start with initiating the session. We have to initialize the variables. So far, t4 was just declared, not initialized. Here, we actually initialize it. The initialize code is executed. In this case, it happens to be "tf.ones_initializer". So, t4 starts as a 4x4 Tensor with all values set to 1.</p><p>Next, we run the expression along with the feed_dict. Remember that the expression has a placeholder t3. It will not evaluate unless we give it a value for t3. This value is passed through feed_dict. Each run updates t4 and assigns a new value to it.</p><p>The above code generates this output:</p><pre><code class='python'>Initialized variables
+----------------------------------------------
+[[1. 1. 1. 1.]
+ [1. 1. 1. 1.]
+ [1. 1. 1. 1.]
+ [1. 1. 1. 1.]]
+
+After First Run
+--------------------------------------------------
+[[11.483105 10.39291  11.380319  9.601738]
+ [11.483105 10.39291  11.380319  9.601738]
+ [11.483105 10.39291  11.380319  9.601738]
+ [11.483105 10.39291  11.380319  9.601738]]
+
+After Second Run
+-------------------------------------------------
+[[20.483215 16.11417  19.363663 15.015686]
+ [20.483215 16.11417  19.363663 15.015686]
+ [20.483215 16.11417  19.363663 15.015686]
+ [20.483215 16.11417  19.363663 15.015686]]
+
+After Third Run
+--------------------------------------------------
+[[32.022038 26.227888 28.65984  23.72137 ]
+ [32.022038 26.227888 28.65984  23.72137 ]
+ [32.022038 26.227888 28.65984  23.72137 ]
+ [32.022038 26.227888 28.65984  23.72137 ]]</code></pre><p>One can evaluate the expression three times to assert the output is same as we expected.</p>
+
+</body><script>loadPageFormat();</script></script></html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html><html><head><title>Current Queries</title><script src='scripts/index.js'></script></head><body><h1>Current Queries</h1><hr/>
+
+<p>It is perhaps an integral part of the software development life cycle, that once the application is developed and deployed, it crashes - or at least hangs. Most of us have seen this happen. And the database is the primary suspect in the debugging process. </p><p>In order to identify the culprit or to prove innocence, we need to identify what query is running in the database at that time. Oracle provides us many different ways for doing that.</p><p>We have two important system views - V$SQLTEXT and V$SESSION. The first gives us the actual SQL text for any SQL query that was executed, and V$SESSION gives us the information for any session. The history retention is configurable. These two can be joined as below, to get information about the currently running SQL queries:</p><pre><code class='sql'>SELECT
+    s.username,
+    s.sid,
+    s.osuser,
+    t.sql_id,
+    sql_text
+FROM
+    v$sqltext t,
+    v$session s
+WHERE
+        t.sql_id = s.sql_id
+    AND
+        s.status = 'ACTIVE'
+    AND
+        s.username <> 'SYSTEM'
+ORDER BY
+    s.sid,
+    t.piece
+/</code></pre><p>This gave me the output</p><pre><code class='sql'>USERNAME                              SID OSUSER                         SQL_ID        SQL_TEXT
+------------------------------ ---------- ------------------------------ ------------- ----------------------------------------------------------------
+LEARN                                 144 vikas                          gqkjtkvqmnvhq SELECT     s.username,     s.sid,     s.osuser,     t.sql_id,
+LEARN                                 144 vikas                          gqkjtkvqmnvhq   sql_text FROM     v$sqltext t,     v$session s WHERE         t
+LEARN                                 144 vikas                          gqkjtkvqmnvhq .sql_id = s.sql_id     AND         s.status = 'ACTIVE'     AND
+LEARN                                 144 vikas                          gqkjtkvqmnvhq        s.username <> 'SYSTEM' ORDER BY     s.sid,     t.piece</code></pre><p>That is because it was the only query running on my system at that time. If we have more than that, we can see all of them.</p>
+
+</body><script>loadPageFormat();</script></script></html>

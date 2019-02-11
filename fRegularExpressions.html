@@ -1,0 +1,84 @@
+<!DOCTYPE html><html><head><title>Regular Expressions</title><script src='scripts/index.js'></script></head><body><h1>Regular Expressions</h1><hr/>
+
+<p>Developers often encounter a requirement where we need to check if the contents of a string follow a particular pattern. For example, we might want to know if the string contains any white space, or any non alphanumeric characters, or if it starts with a capital, ... There are several such scenarios. Few decades ago, people had to get down to using a substring (or some pointer arithmetic in the age of C). But as this requirement surfaced again and again, developers came up with libraries that helped with this task, that formalized over time as regular expressions. In due time, Regular expressions became an integral part of any language.</p>
+<p>The syntax of Regular Expressions is almost the same in all languages. There could be minor value additions and flavors of each language, but it is essentially the same. Having understood Regex for one language, we can easily use that knowledge for any other language. Here are some of the important concepts in regular expressions that can help us get into a detailed study.</p><h2>Character Groups</h2><hr/><p>Regular expressions allow us a lot more than character matches. We can add logical options like "one of these characters"</p><table><tr><th>No.</th><th>Character Class</th><th>Description</th></tr><tr><td>1</td><td>[abc]</td><td>a, b, or c (simple class)</td></tr><tr><td>2</td><td>[^abc]</td><td>Any character except a, b, or c (negation)</td></tr><tr><td>3</td><td>[a-zA-Z]</td><td>a through z or A through Z, inclusive (range)</td></tr><tr><td>4</td><td>[a-d[m-p]]</td><td>a through d, or m through p: [a-dm-p] (union)</td></tr><tr><td>5</td><td>[a-z&&[def]]</td><td>d, e, or f (intersection)</td></tr><tr><td>6</td><td>[a-z&&[^bc]]</td><td>a through z, except for b and c: [ad-z] (subtraction)</td></tr><tr><td>7</td><td>[a-z&&[^m-p]]</td><td>a through z, and not m through p: [a-lq-z](subtraction)</td></tr></table><h4>Example:</h4><hr/><pre><code class='java'>package com.solegaonkar.learnjava;
+
+import java.util.regex.*;  
+class RegexExample3{  
+ public static void main(String args[]){  
+  System.out.println(Pattern.matches("[xyz]", "abcd"));    //false (not x or y or z)  
+  System.out.println(Pattern.matches("[xyz]", "y"));    //true (among x or y or z)  
+  System.out.println(Pattern.matches("[xyz]", "xyzxyzxxx"));    //false (more than one occurence)  
+ }
+}</code></pre><h2>Predefined character classes</h2><hr/><p>There are some character groups that we use quite often. For example, to check if it is a number or an alphabet... To add to our convenience, RegEx syntax has some predefined character classes</p><table><tr><th>Construct</th><th>Description</th></tr><tr><td>.</td><td>Any character (may or may not match line terminators)</td></tr><tr><td>\d</td><td>A digit: [0-9]</td></tr><tr><td>\D</td><td>A non-digit: [^0-9]</td></tr><tr><td>\s</td><td>A whitespace character: [ \t\n\x0B\f\r]</td></tr><tr><td>\S</td><td>A non-whitespace character: [^\s]</td></tr><tr><td>\w</td><td>A word character: [a-zA-Z_0-9]</td></tr><tr><td>\W</td><td>A non-word character: [^\w]</td></tr></table><h4>Example:</h4><hr/><pre><code class='java'>package com.solegaonkar.learnjava;
+
+import java.util.regex.*;  
+class RegexExample5{  
+ public static void main(String args[]){  
+  System.out.println("metacharacters d....");\\d means digit  
+    
+  System.out.println(Pattern.matches("\\d", "abc"));//false (non-digit)  
+  System.out.println(Pattern.matches("\\d", "1"));//true (digit and comes once)  
+  System.out.println(Pattern.matches("\\d", "4443"));//false (digit but comes more than once)  
+  System.out.println(Pattern.matches("\\d", "323abc"));//false (digit and char)  
+    
+  System.out.println("metacharacters D....");\\D means non-digit  
+    
+  System.out.println(Pattern.matches("\\D", "abc"));//false (non-digit but comes more than once)  
+  System.out.println(Pattern.matches("\\D", "1"));//false (digit)  
+  System.out.println(Pattern.matches("\\D", "4443"));//false (digit)  
+  System.out.println(Pattern.matches("\\D", "323abc"));//false (digit and char)  
+  System.out.println(Pattern.matches("\\D", "m"));//true (non-digit and comes once)  
+    
+  System.out.println("metacharacters D with quantifier....");  
+  System.out.println(Pattern.matches("\\D*", "mak"));//true (non-digit and may come 0 or more times)  
+ }
+}</code></pre><h2>Quantifiers</h2><hr/><p>Another convenience feature of the RegEx syntax is the quantifier. At times we need to check for more than just one character.</p><table><tr><th>Greedy</th><th>Reluctant</th><th>Possessive</th><th>Meaning</th></tr><tr><td>X?</td><td>X??</td><td>X?+</td><td>X, once or not at all</td></tr><tr><td>X*</td><td>X*?</td><td>X*+</td><td>X, zero or more times</td></tr><tr><td>X+</td><td>X+?</td><td>X++</td><td>X, one or more times</td></tr><tr><td>X{n}</td><td>X{n}?</td><td>X{n}+</td><td>X, exactly n times</td></tr><tr><td>X{n,}</td><td>X{n,}?</td><td>X{n,}+</td><td>X, at least n times</td></tr><tr><td>X{n,m}</td><td>X{n,m}?</td><td>X{n,m}+</td><td>X, at least n but not more than m times</td></tr></table><p>There are three main types of quantifiers. Greedy - Try to grab as much as possible. Reluctant grab as little as possible. While, possessive goes another step beyond greedy algorithms - to get multiples of itself.</p><h4>Example</h4><hr/><pre><code class='java'>package com.solegaonkar.learnjava;
+
+import java.util.regex.*;  
+class RegexExample4{  
+ public static void main(String args[]){  
+  System.out.println("? quantifier ....");  
+  System.out.println(Pattern.matches("[amn]?", "a"));//true (a or m or n comes one time)  
+  System.out.println(Pattern.matches("[amn]?", "aaa"));//false (a comes more than one time)  
+  System.out.println(Pattern.matches("[amn]?", "aammmnn"));//false (a m and n comes more than one time)  
+  System.out.println(Pattern.matches("[amn]?", "aazzta"));//false (a comes more than one time)  
+  System.out.println(Pattern.matches("[amn]?", "am"));//false (a or m or n must come one time)  
+    
+  System.out.println("+ quantifier ....");  
+  System.out.println(Pattern.matches("[amn]+", "a"));//true (a or m or n once or more times)  
+  System.out.println(Pattern.matches("[amn]+", "aaa"));//true (a comes more than one time)  
+  System.out.println(Pattern.matches("[amn]+", "aammmnn"));//true (a or m or n comes more than once)  
+  System.out.println(Pattern.matches("[amn]+", "aazzta"));//false (z and t are not matching pattern)  
+    
+  System.out.println("* quantifier ....");  
+  System.out.println(Pattern.matches("[amn]*", "ammmna"));//true (a or m or n may come zero or more times)  
+ }
+}</code></pre><h2>Boundary Matchers</h2><hr/><p>In all the cases we checked above, the expressions match a particular set of characters in the input. Boundary matchers allow you to take a step further to matches borders - like beginning of a word, or the string or end of a word or string. These can help us with requirements like identify words that end with 'ed' or match the article a - not just any character a.</p><table><tr><th>Boundary Construct</th><th>Description</th></tr><tr><td>^</td><td>The beginning of a line</td></tr><tr><td>$</td><td>The end of a line</td></tr><tr><td>\b</td><td>A word boundary</td></tr><tr><td>\B</td><td>A non-word boundary</td></tr><tr><td>\A</td><td>The beginning of the input</td></tr><tr><td>\G</td><td>The end of the previous match</td></tr><tr><td>\Z</td><td>The end of the input but for the final terminator, if any</td></tr><tr><td>\z</td><td>The end of the input</td></tr></table><h4>Example</h4><hr/><pre><code class='java'>package com.solegaonkar.learnjava;
+
+import java.util.regex.*;
+public class RegexExample5 {
+ public static void main(String[] args) {
+  String txt = "xyz xyzxyz";
+
+  // Demonstrating ^
+  String regex1 = "^xyz";
+  Pattern pattern1 = Pattern.compile(regex1, Pattern.CASE_INSENSITIVE);
+  Matcher matcher1 = pattern1.matcher(txt);
+  while (matcher1.find()) {
+   System.out.println("Start index: " + matcher1.start());
+   System.out.println("End index: " + matcher1.end());
+  }
+
+  // Demonstrating $
+  String regex2 = "xyz$";
+  Pattern pattern2 = Pattern.compile(regex2, Pattern.CASE_INSENSITIVE);
+  Matcher matcher2 = pattern2.matcher(txt);
+  while (matcher2.find()) {
+   System.out.println("\nStart index: " + matcher2.start());
+   System.out.println("End index: " + matcher2.end());
+  }
+ }
+}</code></pre><h2>Groups</h2><hr/><p>Groups do not particularly contribute in matching a pattern. But have a good role to play when retrieving data from the Matcher. If the RegEx has groups built into it, we can extract individual elements of the matched sequence. For example if the RegEx is (\d)\d(\d) and the input string is 123, the pattern will match and when we invoke group(1), we get 1 - because that is the first group in the match. group(2) would return 3 - because that is the second group in the match.</p><table><tr><th>Method</th><th>Description</th></tr><tr><td>start(int group)</td><td>Returns the start index of the subsequence captured by the given group during the previous match operation.</td></tr><tr><td>end (int group)</td><td>Returns the index of the last character, plus one, of the subsequence captured by the given group during the previous match operation.</td></tr><tr><td>group (int group)</td><td>Returns the input subsequence captured by the given group during the previous match operation.</td></tr></table><p>This is very useful when we want to extract only a part of the string that matches. For example, if we want the domain names from all the Email Id's in a document, we can create a RegEx that matches any Email ID and have a group inside that RegEx that could extract the domain name.</p>
+
+</body><script>loadPageFormat();</script></script></html>

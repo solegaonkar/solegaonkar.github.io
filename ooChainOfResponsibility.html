@@ -1,0 +1,85 @@
+<!DOCTYPE html><html><head><title>Chain of Responsibility Pattern</title><script src='scripts/index.js'></script></head><body><h1>Chain of Responsibility Pattern</h1><hr/>
+
+<p>A typical IT company has developers, testers, managers, sales and marketing teams and various different departments. These roles often overlap in small companies (<100 employees), but in some of the bigger ones, each of these have an elaborate hierarchy, and very few employees know each other. Yet, the process is (should be) set up in a way that everyone gets to do his job and contribute appropriately to the extent that the final product is delivered with quality and schedule. </p><p>How does the information travel across the organization? Each employee of the organization cannot start broadcasting all that he has to say - that would cause chaos. All the information cannot be shared with everyone in the organization - that would cause chaos too. The right way to do this, is by defining an appropriate process and defining roles that can pass the information to each other till it reaches everyone concerned.</p><p>That is a chain of responsibility. In a complex software application, it is not possible (or advisable) to have each module talking to the other. A well designed system should keep them isolated. In such a case, passing information can be a big challenge. The chain of responsibility pattern is the ideal solution to such a problem. A module can pass on the information to the connected module that is responsible for passing it ahead, and so on till it reaches the destination. </p><p>In this way, the information is passed without the source or target knowing each other. But the chain must be directed. Each object should know the direction in which it should pass a given message - else it would be worse than a broadcast.</p><p>This avoids attaching the sender of a request to its receiver, giving this way other objects the possibility of handling the request too. The objects become parts of a chain and the request is sent from one object to another across the chain until one of the objects will handle it.</p><h3>Participants</h3><hr/><p>The participants in a chain of responsibility are:</p><ul><li>Client - The source of the message</li><li>Handler - An interface that exports a method handleMessage(). Each component of the chain of responsibility implements this interface and allows the request to pass along. </li><li>Concrete Handler - This is the actual recipient of the message that accepts the request and processes it.</li></ul>
+<h2>Implementation</h2><hr/><p>Let us now look at how the Chain of Responsibility pattern in implemented in code:</p><pre><code class='java'>public class Request {	
+	private int m_value;
+	private String m_description;
+
+	public Request(String description, int value) {
+		m_description = description;
+		m_value = value;
+	}
+
+	public int getValue() {
+		return m_value;
+	}
+
+	public String getDescription() {
+		return m_description;
+	}          
+}
+
+public abstract class Handler {
+	protected Handler m_successor;
+	public void setSuccessor(Handler successor) {
+		m_successor = successor;
+	}
+
+	public abstract void handleRequest(Request request);
+}
+
+public class ConcreteHandlerOne extends Handler {
+	public void handleRequest(Request request) {
+		if (request.getValue() < 0) {           //if request is eligible handle it
+			System.out.println("Negative values are handled by ConcreteHandlerOne:");
+			System.out.println("\tConcreteHandlerOne.HandleRequest : " + request.getDescription()
+						 + request.getValue());
+		} else {
+			super.handleRequest(request);
+		}
+	}
+}
+
+public class ConcreteHandlerThree extends Handler {
+	public void handleRequest(Request request) {
+		if (request.getValue() >= 0) {           //if request is eligible handle it
+			System.out.println("Zero values are handled by ConcreteHandlerThree:");
+			System.out.println("\tConcreteHandlerThree.HandleRequest : " + request.getDescription()
+						 + request.getValue());
+		} else {
+			super.handleRequest(request);
+		}
+	}
+}
+
+public class ConcreteHandlerTwo extends Handler {
+	public void handleRequest(Request request) {
+		if (request.getValue() > 0) {           //if request is eligible handle it
+			System.out.println("Positive values are handled by ConcreteHandlerTwo:");
+			System.out.println("\tConcreteHandlerTwo.HandleRequest : " + request.getDescription()
+						 + request.getValue());
+		} else {
+			super.handleRequest(request);
+		}
+	}
+}
+
+public class Main {
+	public static void main(String[] args) {
+		// Setup Chain of Responsibility
+		Handler h1 = new ConcreteHandlerOne();
+		Handler h2 = new ConcreteHandlerTwo();
+		Handler h3 = new ConcreteHandlerThree();
+		h1.setSuccessor(h2);
+		h2.setSuccessor(h3);
+
+		// Send requests to the chain
+		h1.handleRequest(new Request("Negative Value ", -1));
+		h1.handleRequest(new Request("Negative Value ",  0));
+		h1.handleRequest(new Request("Negative Value ",  1));
+		h1.handleRequest(new Request("Negative Value ",  2));
+		h1.handleRequest(new Request("Negative Value ", -5));	    
+	}
+}</code></pre>
+
+</body><script>loadPageFormat();</script></script></html>

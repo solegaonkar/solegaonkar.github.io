@@ -1,0 +1,50 @@
+<!DOCTYPE html><html><head><title>Indexing Data Frames</title><script src='scripts/index.js'></script></head><body><h1>Indexing Data Frames</h1><hr/>
+
+<p>By indexing, we can obtain subsets of the given dataframe. Often we need to add new rows and columns to the given data frame. R provides some functions to enable this functionality. R provides two methods - cbind and rbind to do this.</p><h3>Add Row</h3><hr/><p>Lets first check out the row bind functionality. To start with, pick up two parts of the mtcars dataset.</p><pre><code class='r'>&gt; df1 = mtcars[1:5, 1:5]
+&gt; df1
+                   mpg cyl disp  hp drat
+Mazda RX4         21.0   6  160 110 3.90
+Mazda RX4 Wag     21.0   6  160 110 3.90
+Datsun 710        22.8   4  108  93 3.85
+Hornet 4 Drive    21.4   6  258 110 3.08
+Hornet Sportabout 18.7   8  360 175 3.15
+&gt; 
+&gt; df2 = mtcars[6, 1:5]
+&gt; df2
+         mpg cyl disp  hp drat
+Valiant 18.1   6  225 105 2.76</code></pre><p>Now, we can join these using rbind</p><pre><code class='r'>&gt; df &lt;- rbind(df1, df2)
+&gt; df
+                   mpg cyl disp  hp drat
+Mazda RX4         21.0   6  160 110 3.90
+Mazda RX4 Wag     21.0   6  160 110 3.90
+Datsun 710        22.8   4  108  93 3.85
+Hornet 4 Drive    21.4   6  258 110 3.08
+Hornet Sportabout 18.7   8  360 175 3.15
+Valiant           18.1   6  225 105 2.76
+&gt;</code></pre><h3>Add Column</h3><hr/><p>Similarly, we can also join columns using the cbind command.</p><pre><code class='r'>&gt; df1 &lt;- mtcars[1:5, 1:5]
+&gt; df2 &lt;- mtcars[1:5, 6:7]
+&gt; 
+&gt; df1
+                   mpg cyl disp  hp drat
+Mazda RX4         21.0   6  160 110 3.90
+Mazda RX4 Wag     21.0   6  160 110 3.90
+Datsun 710        22.8   4  108  93 3.85
+Hornet 4 Drive    21.4   6  258 110 3.08
+Hornet Sportabout 18.7   8  360 175 3.15
+&gt; df2
+                     wt  qsec
+Mazda RX4         2.620 16.46
+Mazda RX4 Wag     2.875 17.02
+Datsun 710        2.320 18.61
+Hornet 4 Drive    3.215 19.44
+Hornet Sportabout 3.440 17.02
+&gt;</code></pre><p>Now, we can merge these using the rbind method</p><pre><code class='r'>&gt; cbind(df1, df2)
+                   mpg cyl disp  hp drat    wt  qsec
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02
+&gt;</code></pre><p>Ofcourse, for the cbind and rbind to work properly, the other dimension should match correctly. For example, while appending rows using rbind, the columns should match properly and vice-versa.</p>
+
+</body><script>loadPageFormat();</script></script></html>

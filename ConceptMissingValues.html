@@ -1,0 +1,16 @@
+<!DOCTYPE html><html><head><title>Missing Values</title><script src='scripts/index.js'></script></head><body><h1>Missing Values</h1><hr/>
+
+<p>This is one of the simplest Dimensionality Reduction technique. This may sound trivial. But it is a lot more helpful than one would expect. It should be the first that we consider when we look for dimensionality reduction of some kind. In essence, this technique advises us to drop the features that do not have enough data.</p><p>Sounds good. But how do we decide if there is enough data? In a practical scenario, we look into the available data, to get a feel of what is in there. That requires software code to identify which features have missing data. Then, based on the domain and scenario, we need to identify a threshold that can help us identify if we can really gain anything out of the data available for the given parameter.</p><p>With all this processing, we can then drop some of the features and we have data that is more manageable.</p><h3>Python Code</h3><hr/><p>Once we know what we want, the Python code is not complex. We just need to loop over the list of columns in the data set; checking for the fraction of missing values. As we do this, we drop off the columns that are have more missing values that the defined threshold.</p><pre><code class='python'>import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+train=pd.read_csv("train_data.csv")
+
+a = 100 * train.isnull().sum()/len(train)
+c = []
+
+for x in train.columns:
+  if a[x] < 10:
+    c.append(x)</code></pre><p>Considering the threshold as 10%, this code chooses only those columns that have at least 90% of good data. Of course, this threshold is configurable and we can play around with it depending upon the amount of data available.</p>
+
+</body><script>loadPageFormat();</script></script></html>

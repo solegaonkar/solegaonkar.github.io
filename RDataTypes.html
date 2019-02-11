@@ -1,0 +1,48 @@
+<!DOCTYPE html><html><head><title>R Data Types</title><script src='scripts/index.js'></script></head><body><h1>R Data Types</h1><hr/>
+
+<p>Like most scripting languages, variables in R are not hard typed. You do not declare a variable to be limited to a given data type. The variables in R are assigned with R-Objects and the data type of the R-object becomes the data type of the variable. There are many types of R-objects. The frequently used ones are:</p><ul><li>Vectors</li><li>    Lists</li><li>    Matrices</li><li>    Arrays</li><li>    Factors</li><li>    Data Frames</li></ul><p>The simplest of these objects is the vector object and there are six data types of these atomic vectors, also termed as six classes of vectors. The other R-Objects are built upon the atomic vectors.</p><ul><li>Logical (TRUE / FALSE)</li><li>    Numeric (1, 2, 33.44)</li><li>    Integer (1L, -100L, 0L</li><li>    Complex (4 + 10i))</li><li>    Character ("1", "examples", 'of', "characters")</li><li>    Raw (A raw sequence of bytes.)</li></ul><pre><code class='r'>v &lt;- TRUE 
+print(class(v))
+[1] "logical" 
+
+v &lt;- 23.5
+print(class(v))
+[1] "numeric"
+
+v &lt;- 2L
+print(class(v))
+[1] "integer"
+
+v &lt;- 2+5i
+print(class(v))
+[1] "complex"
+
+v &lt;- "TRUE"
+print(class(v))
+[1] "character"
+
+v &lt;- charToRaw("Convert Characters to RAW")
+print(class(v))
+[1] "raw"</code></pre><h2>Variable</h2><hr/><p>A valid variable name consists of letters, numbers and the dot or underline characters. The variable name starts with a letter or the dot not followed by a number.</p><pre><code class='r'>var_name2. # Valid Has letters, numbers, dot and underscore
+var_name% # Invalid Has the character '%'. Only dot(.) and underscore allowed.
+2var_name # Invalid Starts with a number
+.var_name # Valid Can start with a dot(.) but the dot(.)should not be followed by a number.
+var.name # Valid Variable name can contain a dot(.)
+.2var_name # Invalid The starting dot is followed by a number making it invalid.
+_var_name # Invalid Starts with _ which is not valid</code></pre><p>The variables can be assigned values using leftward, rightward and equal to operator.</p><pre><code class='r'># Assignment using equal operator.
+var.1 = c(0,1,2,3)
+
+# Assignment using leftward operator.
+var.2 <- c("learn","R")
+
+# Assignment using rightward operator.   
+c(TRUE,1) -> var.3
+
+cat ("var.1 is ", var.1 ,"\n")
+cat ("var.2 is ", var.2 ,"\n")
+cat ("var.3 is ", var.3 ,"\n")</code></pre><h3>print() / cat()</h3><hr/><p>We can view the contents of a variable using the print or cat functions. Print takes a single parameter while cat takes multiple parameters and concatenates them all.</p><pre><code class='r'>print("Hello World")
+[1] "Hello World"
+
+cat("Hello", "World")
+Hello world</code></pre><h3>ls() / rm()</h3><hr/><p>R does not provide for namespaces. (You can import certain packages to enforce namespaces). For example, a variable declared in an if block is also available after you come out of the block. It is very easy to lose track of the variables available at a given point. R provides for two very useful functions to deal with this.</p><p>ls() gives a list of variables defined at a given time. And, if you want, you can also delete a variable from the memory using the rm()</p>
+
+</body><script>loadPageFormat();</script></script></html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html><html><head><title>Web scrapping with Python</title><script src='scripts/index.js'></script></head><body><h1>Web scrapping with Python</h1><hr/>
+
+<p>The internet is an ocean of information. But the problem is that it is scattered and not indexed. It is targetted towards humans and not machines. Hence we find it difficult to access it in our applications. Some of the large websites like Twitter, Facebook, Google, StackOverflow, Github provide defined APIs to allow us to query and get information from them using our applications. But for most others, we have to find our own way. Here, the information is organized for a better visual impact rather than ease of extraction.</p><p>Web scraping is the software technique of extracting such information from websites. This technique mostly focuses on the transformation of unstructured data (HTML format) on the web into structured data (database or spreadsheet).</p><p>Essentially you need to parse the html to extract the required data. It would be an impossible (and meaningless) task to parse each website using plain old regular expressions. Python provides us a lot more than that. "BeautifulSoup" is one good utility that helps you with this task. which assists this task. If you prefer a GUI tool, you can check out import.io . It provides a GUI driven interface to perform all basic web scraping operations. But as we see everywhere, as tools get more and more user friendly, they tend to lose their power. In this article, I’ll show you aroud the BeautifulSoup and how to use it to extract useful data.</p><p>Urllib is another Python module used for fetching data from URLs. It has a good chunk of functions and classes to help you around with the basic tasks aw well as authentication, redirections, cookies, etc.</p><p>If you like to venture more, BeautifulSoup has a few other alternatives like mechanize, scrapemark, scrapy.</p><h2>Working with BeautifulSoup</h2><hr/><p>As an introduction, we can try scraping data from a Wikipedia page. Our final goal is to extract list of state, union territory capitals in India. And some basic detail like establishment, former capital and others form this wikipedia page. Let’s learn with doing this project step wise step:</p><pre><code class='python'>#import the library used to query a website
+import urllib
+import pandas as pd
+from bs4 import BeautifulSoup
+
+#specify the url
+wiki = "https://en.wikipedia.org/wiki/List_of_state_and_union_territory_capitals_in_India"
+
+#Query the website and return the html to the variable 'page'
+page = urllib.request.urlopen(wiki)
+
+#Parse the html in the 'page' variable, and store it in Beautiful Soup format
+soup = BeautifulSoup(page)
+print(soup.prettify())</code></pre><p>BeautifulSoup essentially does the parsing for you and you can now extract information from the HTML using - soup.: Return content between opening and closing tag including tag.</p><pre><code class='python'>soup.title
+soup.*.string   # Return string within given tag.
+
+soup.title.string 
+u'List of state and union territory capitals in India - Wikipedia, the free encyclopedia'</code></pre><p>As you noticed, the above calls returned only the first matching element. If you want to find all the mathes, use the find_all() method. To find all the links within page's tags</p><pre><code class='python'>soup.find_all("a")</code></pre><p>You can also use queries to get filter the list returned.</p><pre><code class='python'>right_table = soup.find('table', class_='wikitable sortable plainrowheaders')
+
+#Generate lists
+A=[]
+B=[]
+C=[]
+D=[]
+E=[]
+F=[]
+G=[]
+for row in right_table.findAll("tr"):
+    cells = row.findAll('td')
+    states=row.findAll('th') #To store second column data
+    if len(cells)==6: #Only extract table body not heading
+        A.append(cells[0].find(text=True))
+        B.append(states[0].find(text=True))
+        C.append(cells[1].find(text=True))
+        D.append(cells[2].find(text=True))
+        E.append(cells[3].find(text=True))
+        F.append(cells[4].find(text=True))
+        G.append(cells[5].find(text=True))
+
+
+df = pd.DataFrame(A,columns=['Number'])
+df['State/UT']=B
+df['Admin_Capital']=C
+df['Legislative_Capital']=D
+df['Judiciary_Capital']=E
+df['Year_Capital']=F
+df['Former_Capital']=G
+
+print(df)</code></pre><h2>What's the big deal?</h2><hr/><p>What's the big thing here? Could you not just copy and paste the data into an XLS? If the script is so specific to the page layout, what is the point of running a script? I would rather get the information directly instead of going through all this!</p><p>That is true. Web Scraping does not add too much value when dealing with small pages of this kind. This was only an example. But when you have to extract data from hundreds of "similar" pages, Web Scraping comes in really handy. For example, suppose you want to extract all the comments on all news posted on a given topic? You certainly need a web crawler to do this kind of a job! You often need to perform such massive jobs for tasks like sentiment analysis. That is where Web Scraping comes to your rescue.</p>
+
+</body><script>loadPageFormat();</script></script></html>

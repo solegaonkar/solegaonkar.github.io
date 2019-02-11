@@ -1,0 +1,92 @@
+<!DOCTYPE html><html><head><title>Compound Types</title><script src='scripts/index.js'></script></head><body><h1>Compound Types</h1><hr/>
+
+<p>Compound data types in Python are quite similar to collections in Java.</p><h2>Lists</h2><hr/><p>Python provides for several compound data types - that can be used to process data in groups. A list is the simplest of these. A list can contain a collection of any type of data, including other lists. To define a list, the variables need to be placed sequentially in square brackets. The code below describes the definition of a list and how its elements can be accessed.</p><pre><code class='python'>l = [1, 'Hello', "World", True, [2, 'Learn', "Python", False]]
+print(l)          # [1, 'Hello', 'World', True, [2, 'Learn', 'Python', False]]
+print(l[0])       # 1
+print(l[4])       # [2, 'Learn', 'Python', False]
+print(l[4][0])    # 2
+print(l[4][3])    # False
+print(l[-3])      # World</code></pre><p>Lists also support splicing, and provide several utility functions to add / remove / change data in the list. Check out the code below:</p><pre><code class='python'>letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+
+print(letters)            # ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+print(letters[:])         # ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+
+letters[2:5] = ['C', 'D', 'E']
+print(letters)            # ['a', 'b', 'C', 'D', 'E', 'f', 'g']
+
+letters[2:5] = []
+print(letters)            # ['a', 'b', 'f', 'g']
+
+letters[2:2] = ['c', 'd', 'e']
+print(letters)            # ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+
+letters.append('h')
+print(letters)            # ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+print(len(letters))       # 8
+
+letters.remove('a')
+print(letters)            # ['b', 'c', 'd', 'e', 'f', 'g', 'h']
+
+letters.pop()
+print(letters)            # ['b', 'c', 'd', 'e', 'f', 'g']
+
+del letters[2]
+print(letters)            # ['b', 'c', 'e', 'f', 'g']
+
+del letters[2:4]
+print(letters)            # ['b', 'c', 'g']
+
+letters.reverse()
+print(letters)            # ['g', 'c', 'b']</code></pre><p>Notice that the output of print(letters) is same as that of print(letters[:]). There is a minor difference. The letters[:] is not the same object as letters. It is a copy of the original - a shallow copy.</p><h2>Tuples</h2><hr/><p>Tuples are similar to lists but, have one marked difference. Tuples are immutable. They cannot be changed once they are defined. Naturally, tuples provide most of the methods that lists provide - except any method that would modify the list. You might ask, what is the advantage of forcing such a restriction? It is speed! Due to its immutability, a tuple can be implemented differently from lists - with more focus on speed of execution. As mentioned before, Python being an interpreted language has to lag in speed. But, optimizations like these take it far ahead of others. Tuples are much faster than Lists and are used where we know that the data in the list is not going to change - this is a common scenario.</p><p>One major syntactical difference between List and Tuple is that a tuple is enclosed in circular brackets '(. . .)', while List is enclosed in square brackets '[. . .]'. You can convert a list to tuple and tuple to list by typecasting. Python also allows you to define a tuple without any brackets - because it is the most natural sequence for Python. A tuple can be converted to a list and a list can be converted to a tuple. Check out the code below for more.</p><pre><code class='python'>t = (1, 2, 3)
+print(t)         # (1, 2, 3)
+
+t = 1, 2, 3
+print(t)         # (1, 2, 3)
+
+t = (1, 2, 'String', (3, 4, "String 2"), [1, 2, 3])
+print(t)         # (1, 2, 'String', (3, 4, 'String 2'), [1, 2, 3])
+
+print(t[4])      # [1, 2, 3]
+
+t[4].extend([2, 3, 4])
+print(t)         # (1, 2, 'String', (3, 4, 'String 2'), [1, 2, 3, 2, 3, 4])
+
+l = list(t)
+print(l)         # [1, 2, 'String', (3, 4, 'String 2'), [1, 2, 3, 2, 3, 4]]
+
+t = tuple(l)
+print(t)         # (1, 2, 'String', (3, 4, 'String 2'), [1, 2, 3, 2, 3, 4])</code></pre><p>Note that although the tuple is immutable, a list contained in the tuple can be modified - because the tuple just contains the reference to the list object. The reference should not change. The list itself may be modified.</p><h2>Sets</h2><hr/><p>Sets are similar to their counterparts in other languages. As the name suggests, they ensure a distinct set of elements. Any duplicates are ignored. Sets do not have any order of elements. They are defined by data enclosed in curly braces - '{. . .}'. A set can be typecast to and from lists or tuples. Sets define various methods for manipulation.</p><pre><code class='python'>s = {1, "String", ('1', 'Tuple'), 1, 2}
+print(s)        # {1, 'String', 2, ('1', 'Tuple')}
+
+s.add(1)
+print(s)        # {1, 'String', 2, ('1', 'Tuple')}
+
+s.add(3)
+print(s)        # {1, 'String', 3, 2, ('1', 'Tuple')}
+
+s.remove(1)
+print(s)        # {'String', 3, 2, ('1', 'Tuple')}
+
+# remove throws an exception and discard just ignores any attempt to remove non existent element
+s.discard("Strings")
+print(s)        # {'String', 3, 2, ('1', 'Tuple')}
+
+s.pop()
+print(s)        # {3, 2, ('1', 'Tuple')}
+
+s.clear()
+print(s)        # set()</code></pre><p>Sets are choosy about the elements that they allow. For example, you cannot have a list inside a set. The elements have to be immutable and "hashable".</p><h2>Dictionaries</h2><hr/><p>Dictionaries are a special set of keys with a value associated with each key. You can work with a dictionary as below:</p><pre><code class='python'>d = {'key1': 'value1', 'key2': 'value2', 'key3': 'value3'}
+print(d)           # {'key1': 'value1', 'key2': 'value2', 'key3': 'value3'}
+
+print(d['key1'])   # value1
+
+d['key7'] = 'value7'
+print(d)           # {'key1': 'value1', 'key2': 'value2', 'key3': 'value3', 'key7': 'value7'}
+
+del d['key7']
+print(d)           # {'key1': 'value1', 'key2': 'value2', 'key3': 'value3'}
+
+d['key1'] = 'New Value 1'
+print(d)           # {'key1': 'New Value 1', 'key2': 'value2', 'key3': 'value3'}</code></pre><p>The above code describes the most common functionalities of a dictionary.</p>
+
+</body><script>loadPageFormat();</script></script></html>

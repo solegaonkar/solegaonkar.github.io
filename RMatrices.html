@@ -1,0 +1,165 @@
+<!DOCTYPE html><html><head><title>R Matrices</title><script src='scripts/index.js'></script></head><body><h1>R Matrices</h1><hr/>
+
+<p>Matrix is a very useful data structure in R. A lot of data processing and machine learning computations involve Matrices. So it is important that we understand this well.</p><p>As one would expect, the Matrix is a two dimensional data structure consisting of rows and columns.</p><h3>Creating a Matrix</h3><hr/><p>Matrix can be defined using the finction matrix(). The first/required argument to this function is the vector that should be cast into a matrix. The matrix() function splits the vector into a matrix based on the parameters passed in.</p><pre><code class='r'>&gt; matrix(1:20, nrow=4)
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    5    9   13   17
+[2,]    2    6   10   14   18
+[3,]    3    7   11   15   19
+[4,]    4    8   12   16   20</code></pre><p>By default, the values are split along the columns. But, we can make it flow along rows by setting the byrow parameter.</p><pre><code class='r'>&gt; matrix(1:20, byrow=TRUE, nrow=4)
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    2    3    4    5
+[2,]    6    7    8    9   10
+[3,]   11   12   13   14   15
+[4,]   16   17   18   19   20</code></pre><p>OR</p><pre><code class='r'>&gt; matrix(1:20, byrow=T, nrow=4)
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    2    3    4    5
+[2,]    6    7    8    9   10
+[3,]   11   12   13   14   15
+[4,]   16   17   18   19   20
+&gt;</code></pre><p>Another way to create a matrix from vectors is to bind two or more vectors of same size. This can be done using rbind() or cbind().</p><pre><code class='r'>&gt; rbind(1:5, 2:6)
+     [,1] [,2] [,3] [,4] [,5]
+[1,]    1    2    3    4    5
+[2,]    2    3    4    5    6
+&gt; 
+&gt; cbind(1:5, 2:6)
+     [,1] [,2]
+[1,]    1    2
+[2,]    2    3
+[3,]    3    4
+[4,]    4    5
+[5,]    5    6
+&gt;</code></pre><p>In this case, the names of the individual vectors are assigned as matrix labels.</p><pre><code class='r'>&gt; v1 &lt;- c(1:4)
+&gt; v2 &lt;- c(4:1)
+&gt; rbind(v1,v2)
+   [,1] [,2] [,3] [,4]
+v1    1    2    3    4
+v2    4    3    2    1
+&gt; cbind(v1,v2)
+     v1 v2
+[1,]  1  4
+[2,]  2  3
+[3,]  3  2
+[4,]  4  1
+&gt;</code></pre><h3>Labels</h3><hr/><p>It makes a lot of sense to label the rows and columns so that the code and graphs look a lot more meaningful. We can do that using the methods like colnames and rownames. Consider the below example that depicts the sale of bikes by different brands.</p><p>First define the two vectors</p><pre><code class='r'>&gt; honda &lt;- c(10, 14, 12, 13, 11)
+&gt; honda
+[1] 10 14 12 13 11
+&gt; yamaha &lt;- c(12, 13, 14, 11, 10)
+&gt; yamaha
+[1] 12 13 14 11 10</code></pre><p>Now combine into a single vector that can be split to create a matrix.</p><pre><code class='r'>&gt; sales &lt;- c(honda, yamaha)
+&gt; sales
+[1] 10 14 12 13 11 12 13 14 11 10</code></pre><p>Next, split the vector into a matrix.</p><pre><code class='r'>&gt; sales.matrix &lt;- matrix(sales, byrow=T, nrow=2)
+&gt; sales.matrix
+     [,1] [,2] [,3] [,4] [,5]
+[1,]   10   14   12   13   11
+[2,]   12   13   14   11   10</code></pre><p>Finally, use the functions colnames and rownames to add labels to the matrix.</p><pre><code class='r'>&gt; colnames(sales.matrix) &lt;- c("2013", "2014", "2015", "2016", "2017")
+&gt; rownames(sales.matrix) &lt;- c("Honda", "Yamaha")
+&gt; sales.matrix
+       2013 2014 2015 2016 2017
+Honda    10   14   12   13   11
+Yamaha   12   13   14   11   10
+&gt;</code></pre><h2>Matrix Arithmetic</h2><hr/><p>Just like vectors, the arithmetic operations on the metrices work on the individual elements.</p><pre><code class='r'>&gt; mat &lt;- matrix(1:20, byrow = T, nrow=5)</code></pre><p>Scalar multiplication results in multiplication on each element.</p><pre><code class='r'>&gt; mat * 2
+     [,1] [,2] [,3] [,4]
+[1,]    2    4    6    8
+[2,]   10   12   14   16
+[3,]   18   20   22   24
+[4,]   26   28   30   32
+[5,]   34   36   38   40</code></pre><p>Scalar division results in division of each element</p><pre><code class='r'>&gt; mat / 2
+     [,1] [,2] [,3] [,4]
+[1,]  0.5    1  1.5    2
+[2,]  2.5    3  3.5    4
+[3,]  4.5    5  5.5    6
+[4,]  6.5    7  7.5    8
+[5,]  8.5    9  9.5   10</code></pre><p>Similarly, the exponent method works on each element.</p><pre><code class='r'>&gt; mat ^2
+     [,1] [,2] [,3] [,4]
+[1,]    1    4    9   16
+[2,]   25   36   49   64
+[3,]   81  100  121  144
+[4,]  169  196  225  256
+[5,]  289  324  361  400</code></pre><p>You can also get an inverse of a matrix that results in inverse of each element.</p><pre><code class='r'>&gt; 1/mat
+           [,1]       [,2]       [,3]       [,4]
+[1,] 1.00000000 0.50000000 0.33333333 0.25000000
+[2,] 0.20000000 0.16666667 0.14285714 0.12500000
+[3,] 0.11111111 0.10000000 0.09090909 0.08333333
+[4,] 0.07692308 0.07142857 0.06666667 0.06250000
+[5,] 0.05882353 0.05555556 0.05263158 0.05000000</code></pre><p>Logical operations result in a matrix of boolean values.</p><pre><code class='r'>&gt; mat &gt; 15
+      [,1]  [,2]  [,3]  [,4]
+[1,] FALSE FALSE FALSE FALSE
+[2,] FALSE FALSE FALSE FALSE
+[3,] FALSE FALSE FALSE FALSE
+[4,] FALSE FALSE FALSE  TRUE
+[5,]  TRUE  TRUE  TRUE  TRUE</code></pre><p>You can also filter the matrix elements to get a vector output.</p><pre><code class='r'>&gt; mat[mat &gt; 15]
+[1] 17 18 19 16 20</code></pre><p>Just like scalar addition, you can use the operations on two matrices to get result on individual elements.</p><pre><code class='r'>&gt; mat + mat
+     [,1] [,2] [,3] [,4]
+[1,]    2    4    6    8
+[2,]   10   12   14   16
+[3,]   18   20   22   24
+[4,]   26   28   30   32
+[5,]   34   36   38   40
+&gt; mat * mat
+     [,1] [,2] [,3] [,4]
+[1,]    1    4    9   16
+[2,]   25   36   49   64
+[3,]   81  100  121  144
+[4,]  169  196  225  256
+[5,]  289  324  361  400
+&gt; mat / mat
+     [,1] [,2] [,3] [,4]
+[1,]    1    1    1    1
+[2,]    1    1    1    1
+[3,]    1    1    1    1
+[4,]    1    1    1    1
+[5,]    1    1    1    1
+&gt; mat ^ mat
+             [,1]         [,2]         [,3]         [,4]
+[1,] 1.000000e+00 4.000000e+00 2.700000e+01 2.560000e+02
+[2,] 3.125000e+03 4.665600e+04 8.235430e+05 1.677722e+07
+[3,] 3.874205e+08 1.000000e+10 2.853117e+11 8.916100e+12
+[4,] 3.028751e+14 1.111201e+16 4.378939e+17 1.844674e+19
+[5,] 8.272403e+20 3.934641e+22 1.978420e+24 1.048576e+26
+&gt;</code></pre><p>Matrix dot product is denoted by %*%</p><pre><code class='r'>&gt; mat %*% t(mat)
+     [,1] [,2] [,3] [,4] [,5]
+[1,]   30   70  110  150  190
+[2,]   70  174  278  382  486
+[3,]  110  278  446  614  782
+[4,]  150  382  614  846 1078
+[5,]  190  486  782 1078 1374
+&gt;</code></pre><p>The data operations like sum and mean are implemented by functions like colSums, colMeans, rowSums, rowMeans, sum</p><pre><code class='r'>&gt; colSums(sales.matrix)
+2013 2014 2015 2016 2017 
+  22   27   26   24   21 
+
+&gt; colMeans(sales.matrix)
+2013 2014 2015 2016 2017 
+11.0 13.5 13.0 12.0 10.5 
+
+&gt; rowSums(sales.matrix)
+ Honda Yamaha 
+    60     60 
+
+&gt; rowMeans(sales.matrix)
+ Honda Yamaha 
+    12     12 
+
+&gt; sum(sales.matrix)
+[1] 120
+&gt;</code></pre><p>Data slicing and indexing are required for any data processing. They are implemented as follows</p><pre><code class='r'>&gt; mat[1,]
+[1] 1 2 3 4
+
+&gt; mat[1,3:4]
+[1] 3 4
+
+&gt; mat[1:3,1:3]
+     [,1] [,2] [,3]
+[1,]    1    2    3
+[2,]    5    6    7
+[3,]    9   10   11
+
+&gt; mat[,3:4]
+     [,1] [,2]
+[1,]    3    4
+[2,]    7    8
+[3,]   11   12
+[4,]   15   16
+[5,]   19   20
+&gt;</code></pre>
+
+</body><script>loadPageFormat();</script></script></html>

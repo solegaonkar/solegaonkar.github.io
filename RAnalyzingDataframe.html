@@ -1,0 +1,75 @@
+<!DOCTYPE html><html><head><title>Analyzing Data Frames</title><script src='scripts/index.js'></script></head><body><h1>Analyzing Data Frames</h1><hr/>
+
+<p>While analyzing the data, it is very useful if we can have an initial idea about the kind of data present in the data frame - the columns, the data type, max/min/mean values for numbers, etc. R provides a good set of utilities to make this job simpler. Let us try to understand the data frame states.x77</p><h3>Head / Tail</h3><hr/><p>The data frame is too big to be viewed manually. We can get a very basic glimpse of the data in there by using the head.</p><pre><code class='r'>&gt; head(state.x77)
+           Population Income Illiteracy Life Exp Murder HS Grad Frost   Area
+Alabama          3615   3624        2.1    69.05   15.1    41.3    20  50708
+Alaska            365   6315        1.5    69.31   11.3    66.7   152 566432
+Arizona          2212   4530        1.8    70.55    7.8    58.1    15 113417
+Arkansas         2110   3378        1.9    70.66   10.1    39.9    65  51945
+California      21198   5114        1.1    71.71   10.3    62.6    20 156361
+Colorado         2541   4884        0.7    72.06    6.8    63.9   166 103766
+&gt;</code></pre><p>Or you can use tail to get the last 6 elements</p><pre><code class='r'>&gt; tail(state.x77)
+              Population Income Illiteracy Life Exp Murder HS Grad Frost  Area
+Vermont              472   3907        0.6    71.64    5.5    57.1   168  9267
+Virginia            4981   4701        1.4    70.08    9.5    47.8    85 39780
+Washington          3559   4864        0.6    71.72    4.3    63.5    32 66570
+West Virginia       1799   3617        1.4    69.48    6.7    41.6   100 24070
+Wisconsin           4589   4468        0.7    72.48    3.0    54.5   149 54464
+Wyoming              376   4566        0.6    70.29    6.9    62.9   173 97203
+&gt;</code></pre><p>Please note that 6 is just the default value for number of rows in head and tail. You can always override it using the second parameter</p><pre><code class='r'>&gt; head(mtcars, 3)
+               mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4     21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710    22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+&gt; 
+&gt; tail(mtcars, 3)
+               mpg cyl disp  hp drat   wt qsec vs am gear carb
+Ferrari Dino  19.7   6  145 175 3.62 2.77 15.5  0  1    5    6
+Maserati Bora 15.0   8  301 335 3.54 3.57 14.6  0  1    5    8
+Volvo 142E    21.4   4  121 109 4.11 2.78 18.6  1  1    4    2
+&gt;</code></pre><h3>Summary and Structure</h3><hr/><p>R also provides two more utility functions that help you understand the data</p><pre><code class='r'>&gt; #Structure
+&gt; str(state.x77)
+ num [1:50, 1:8] 3615 365 2212 2110 21198 ...
+ - attr(*, "dimnames")=List of 2
+  ..$ : chr [1:50] "Alabama" "Alaska" "Arizona" "Arkansas" ...
+  ..$ : chr [1:8] "Population" "Income" "Illiteracy" "Life Exp" ...
+&gt; 
+&gt; summary(state.x77)
+   Population        Income       Illiteracy       Life Exp         Murder          HS Grad          Frost             Area       
+ Min.   :  365   Min.   :3098   Min.   :0.500   Min.   :67.96   Min.   : 1.400   Min.   :37.80   Min.   :  0.00   Min.   :  1049  
+ 1st Qu.: 1080   1st Qu.:3993   1st Qu.:0.625   1st Qu.:70.12   1st Qu.: 4.350   1st Qu.:48.05   1st Qu.: 66.25   1st Qu.: 36985  
+ Median : 2838   Median :4519   Median :0.950   Median :70.67   Median : 6.850   Median :53.25   Median :114.50   Median : 54277  
+ Mean   : 4246   Mean   :4436   Mean   :1.170   Mean   :70.88   Mean   : 7.378   Mean   :53.11   Mean   :104.46   Mean   : 70736  
+ 3rd Qu.: 4968   3rd Qu.:4814   3rd Qu.:1.575   3rd Qu.:71.89   3rd Qu.:10.675   3rd Qu.:59.15   3rd Qu.:139.75   3rd Qu.: 81163  
+ Max.   :21198   Max.   :6315   Max.   :2.800   Max.   :73.60   Max.   :15.100   Max.   :67.30   Max.   :188.00   Max.   :566432  
+&gt;</code></pre><h3>Counts</h3><hr/><p>There is another set of functions that help us understand the meaning of the information contained in the data frame</p><pre><code class='r'>&gt; ncol(df)
+[1] 8
+&gt; nrow(df)
+[1] 50
+&gt; 
+&gt; colnames(df)
+[1] "Population" "Income"     "Illiteracy" "Life Exp"   "Murder"     "HS Grad"    "Frost"      "Area"      
+&gt; rownames(df)
+ [1] "Alabama"        "Alaska"         "Arizona"        "Arkansas"       "California"     "Colorado"       "Connecticut"    "Delaware"       "Florida"       
+[10] "Georgia"        "Hawaii"         "Idaho"          "Illinois"       "Indiana"        "Iowa"           "Kansas"         "Kentucky"       "Louisiana"     
+[19] "Maine"          "Maryland"       "Massachusetts"  "Michigan"       "Minnesota"      "Mississippi"    "Missouri"       "Montana"        "Nebraska"      
+[28] "Nevada"         "New Hampshire"  "New Jersey"     "New Mexico"     "New York"       "North Carolina" "North Dakota"   "Ohio"           "Oklahoma"      
+[37] "Oregon"         "Pennsylvania"   "Rhode Island"   "South Carolina" "South Dakota"   "Tennessee"      "Texas"          "Utah"           "Vermont"       
+[46] "Virginia"       "Washington"     "West Virginia"  "Wisconsin"      "Wyoming"       
+&gt;</code></pre><h3>Filter Data</h3><hr/><p>You can also filter the data to get a subset of what is available in the data frame. For example, if we want to pull out only those cars that have 5 gears:</p><pre><code class='r'>&gt; mtcars[mtcars$gear == 5, ]
+                mpg cyl  disp  hp drat    wt qsec vs am gear carb
+Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.7  0  1    5    2
+Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.9  1  1    5    2
+Ford Pantera L 15.8   8 351.0 264 4.22 3.170 14.5  0  1    5    4
+Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.5  0  1    5    6
+Maserati Bora  15.0   8 301.0 335 3.54 3.570 14.6  0  1    5    8
+&gt;</code></pre><p>We can also use logical operators on the condition out there. For example, if we want an additional criteria that the car should also have 4 cylinders, we can do this:</p><pre><code class='r'>&gt; mtcars[mtcars$gear == 5 &amp; mtcars$cyl &gt; 4, ]
+                mpg cyl disp  hp drat   wt qsec vs am gear carb
+Ford Pantera L 15.8   8  351 264 4.22 3.17 14.5  0  1    5    4
+Ferrari Dino   19.7   6  145 175 3.62 2.77 15.5  0  1    5    6
+Maserati Bora  15.0   8  301 335 3.54 3.57 14.6  0  1    5    8
+&gt;</code></pre><p>We can also perform statistical operations on this data:</p><pre><code class='r'>&gt; mean(mtcars[mtcars$hp &gt; 100 &amp; mtcars$wt &gt; 2.5, ]$mpg)
+[1] 16.86364
+&gt;</code></pre>
+
+</body><script>loadPageFormat();</script></script></html>

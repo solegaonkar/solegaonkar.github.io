@@ -1,0 +1,53 @@
+<!DOCTYPE html><html><head><title>R File I/O</title><script src='scripts/index.js'></script></head><body><h1>R File I/O</h1><hr/>
+
+<p>R deals with data. So it has functions for various aspects of data processing. But how does it get this data? Reading from in input file is a very important aspect of data processing. R provides simple functions for reading and writing data to various file formats.</p><h3>File Dump</h3><hr/><p>R allows you to dump data into a file. Such file can be read only in R</p><pre><code class='r'>&gt; df = mtcars
+&gt; save(file = "file.out", compress = T, list = c("df"))
+&gt;</code></pre><p>This saves the contents of df into file.out. The same can be loaded back from the file using the load method</p><pre><code class='r'>&gt; load(file = "file.out")
+&gt; head(df, 3)
+               mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4     21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710    22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+&gt;</code></pre><p>Note the parameter compress=T . Obviously this results in a compressed output file. If you check out the generated file, it is an illegible binary file. You have an option to use ascii=T, that generates a file with ASCII content.</p><h3>Dump Everything</h3><hr/><p>There is an extension of this method that lets you dump everything in the memory. You can specify the file name else, it is saved to ".RData"</p><pre><code class='r'>&gt; save.image()
+&gt;</code></pre><p>You can also set ascii and compress. The load method does not change. It just picks data from the specified file and sets the variables in the memory.</p><pre><code class='r'>&gt; load(".RData")
+&gt;</code></pre><h3>CSV File</h3><hr/><p>You can also save the file in form of a CSV</p><pre><code class='r'>&gt; head(df)
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+&gt;
+&gt; write.csv(df, file="df.csv")
+&gt; df = read.csv("df.csv")
+&gt; head(df)
+                  X  mpg cyl disp  hp drat    wt  qsec vs am gear carb
+1         Mazda RX4 21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+2     Mazda RX4 Wag 21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+3        Datsun 710 22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+4    Hornet 4 Drive 21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+5 Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+6           Valiant 18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+&gt;</code></pre><p>Note here that on reading the CSV file, the row names are treated as the first column in the dataframe.</p><h3>Table</h3><hr/><pre><code class='r'>&gt; head(df)
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+&gt; 
+&gt; write.table(df, "df.table")
+&gt; 
+&gt; head(read.table("df.table"))
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+&gt;</code></pre>
+
+</body><script>loadPageFormat();</script></script></html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html><html><head><title>Exceptions in Python</title><script src='scripts/index.js'></script></head><body><h1>Exceptions in Python</h1><hr/>
+
+ <p>Everything in Python is an object - so is an exception. Any exception is an instance of a class that extends the common base class - Exception. You can 'raise' an exception, using an object of the Exception class. Or else, you can just give the class name as a parameter to the 'raise' command. Python will take care of creating an object for it.</p><pre><code class='python'>class B(Exception):
+     pass
+
+class C(B):
+     pass
+
+class D(C):
+     pass
+
+for cls in [B, C, D]:
+     try:
+         raise cls()
+     except D:
+         print("D")
+     except C:
+         print("C")
+     except B:
+         print("B")</code></pre><p>Note that if the except clauses were reversed (with except B first), it would have printed B, B, B - the first matching except clause is triggered. The concept of Exceptions is not new in Python. Exceptions have been used in several other languages in the past, and most developers are very familiar with them. But the interesting twist that Python provides is because of the flexibility of Python classes and objects. Now you can pass in any damn information with any exception. All you need to do is to create the instance of the exception object, set the object attributes and then raise it!</p><pre><code class='python'>try:
+    e = Exception('Additional information')
+    e.more_info = 'Some more information'
+    raise e
+except Exception as e:
+    print(type(e))
+    print(e.args)
+    print(e.more_info)</code></pre><p>This prints the type of the Exception (Exception), followed by a tuple containing the one argument that was passed in while creating the exception. You can have multiple arguments there. Next line prints 'Some more information' about the exception. This opens infinite possibilities for passing data from the exception to the catch block. You can send out not just strings, but any object that could be useful to the catch block.</p><p>Such minor flexibilities in Python open up infinite possibilities when you design and code!</p>
+
+</body><script>loadPageFormat();</script></script></html>

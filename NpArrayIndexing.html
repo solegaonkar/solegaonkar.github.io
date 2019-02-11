@@ -1,0 +1,61 @@
+<!DOCTYPE html><html><head><title>Array Indexing</title><script src='scripts/index.js'></script></head><body><h1>Array Indexing</h1><hr/>
+
+<p>An array is meaningless without a good indexing strategy. NumPy offers a good range of techniques to index into the arrays and perform quick computations.</p><p>Let us use this array to understand the various indexing strategies</p><pre><code class='python'>&gt;&gt;&gt; a = np.arange(10)**3
+&gt;&gt;&gt; a
+array([  0,   1,   8,  27,  64, 125, 216, 343, 512, 729])</code></pre><p>The most common forms of indexing - find single value using the numerical index, get a slice of the data, etc are quite common.</p><pre><code class='python'>&gt;&gt;&gt; a[2]
+8
+&gt;&gt;&gt; a[2:5]
+array([ 8, 27, 64])</code></pre><h3>Multidimensional Arrays</h3><hr/><p>This gets more interesting with multidimensional arrays</p><pre><code class='python'>&gt;&gt;&gt; def f(x,y):
+...     return 10*x+y
+...
+&gt;&gt;&gt; b = np.fromfunction(f,(5,4),dtype=int)
+&gt;&gt;&gt; b
+array([[ 0,  1,  2,  3],
+       [10, 11, 12, 13],
+       [20, 21, 22, 23],
+       [30, 31, 32, 33],
+       [40, 41, 42, 43]])</code></pre><p>We can index over the row and column by passing in two values</p><pre><code class='python'>&gt;&gt;&gt; b[2,3]
+23
+&gt;&gt;&gt; b[0:5, 1]                       # each row in the second column of b
+array([ 1, 11, 21, 31, 41])
+&gt;&gt;&gt; b[ : ,1]                        # equivalent to the previous example
+array([ 1, 11, 21, 31, 41])
+&gt;&gt;&gt; b[1:3, : ]                      # each column in the second and third row of b
+array([[10, 11, 12, 13],
+       [20, 21, 22, 23]])</code></pre><p>The thumb rule is that when we provide fewer indices than required, the missing indices are assumed to be the full range.</p><h3>Negative Indices</h3><hr/><p>Just like core python, negative indices imply reverse flow from the end of the array.</p><pre><code class='python'>&gt;&gt;&gt; a = np.arange(10)**3</code></pre><pre><code class='python'>&gt;&gt;&gt; a[:6:2] = -1000    # equivalent to a[0:6:2] = -1000; from start to position 6, exclusive, set every 2nd element to -1000
+&gt;&gt;&gt; a
+array([-1000,     1, -1000,    27, -1000,   125,   216,   343,   512,   729])
+&gt;&gt;&gt; a[ : :-1]                                 # reversed a
+array([  729,   512,   343,   216,   125, -1000,    27, -1000,     1, -1000])</code></pre><h3>Iteration</h3><hr/><p>A natural expectation from an array is the ability to iterate on the data. NumPy provides for many interesting ways of doing that.</p><p>For one dimensional arrays, iteration is similar to the native Python arrays</p><pre><code class='python'>&gt;&gt;&gt; a = np.arange(10)**3
+&gt;&gt;&gt; for i in a:
+...     print(i**(1/3.))
+1.0
+2.0
+3.0
+4.0
+5.0
+6.0
+7.0
+8.0
+9.0</code></pre><p>For multidimensional arrays, we can iterate on a dimension at a time.</p><pre><code class='python'>&gt;&gt;&gt; b = np.array([[ 0,  1,  2,  3],
+...                 [10, 11, 12, 13],
+...                 [20, 21, 22, 23],
+...                 [30, 31, 32, 33],
+...                 [40, 41, 42, 43]])
+&gt;&gt;&gt; for row in b:
+...     print(row)
+...
+[0 1 2 3]
+[10 11 12 13]
+[20 21 22 23]
+[30 31 32 33]
+[40 41 42 43]</code></pre><p>Or there is another interesting way of doing that.</p><pre><code class='python'>&gt;&gt;&gt; for element in b.flat:
+...     print(element)
+...
+0
+1
+.
+.
+43</code></pre>
+
+</body><script>loadPageFormat();</script></script></html>

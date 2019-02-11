@@ -1,0 +1,14 @@
+<!DOCTYPE html><html><head><title>High Correlation Filter</title><script src='scripts/index.js'></script></head><body><h1>High Correlation Filter</h1><hr/>
+
+<p>This dimensionality reduction algorithm tries to discard inputs that are very similar to others. In simple words, if your opinion is same as your boss, one of you is not required. If the value of two input parameters is always the same, it means they represent the same entity. Then we do not need two parameters there. Just one should be enough.</p><p>In technical words, if there is a very high correlation between two input variables, we can safely drop one of them.</p><h3>Python Code</h3><hr/><p>The corr() method can be used to identify the correlation between the fields. Ofcourse, before we start we have to choose only the numeric fields as the corr() method works only with the numeric fields. We can have a high correlation between non-numeric fields. But this method works only on numeric fields.</p><pre><code class='python'>numeric = train[['Numeric_1', 'Numeric_2', 'Numeric_3', 'Numeric_4']]
+correlation = numeric.corr()
+numeric_columns = numeric.columns
+
+high_corr = [ ]
+
+for c1 in numeric_columns:
+  for c2 in numeric_columns:
+    if c1 != c2 and c2 not in high_corr and correlation[c1][c2] > 0.9:
+      high_corr.append(c1)</code></pre><p>This gives us a list of columns that can be dropped.</p>
+
+</body><script>loadPageFormat();</script></script></html>

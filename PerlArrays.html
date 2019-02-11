@@ -1,0 +1,91 @@
+<!DOCTYPE html><html><head><title>Perl Arrays</title><script src='scripts/index.js'></script></head><body><h1>Perl Arrays</h1><hr/>
+
+<p>Array in most programming languages implies an ordered chunk of elements that can be indexed. Each language adds its own flavors to this, but the essense remains the same. Perl arrays are not different. A single Perl array can contain any data type - including arrays (Check out <a href="PerlReferences.html" class='link'>References</a>).</p><h2>Basic Syntax</h2><hr/><p>In the syntax, a Perl array is a variable that begins with @. We can also access individual elements of the array. Array elements can be indexed using negative numbers as well. Just as the first element of the array is indexed by 0, the last element is indexed by -1. Second last by -2 and so on. Thus we can also use</p><pre><code class='perl'>#!/bin/perl
+
+@a = (1, 'one', $variable);
+
+print("$a[0], $a[1], $a[2]\n");
+print("$a[-3], $a[-2], $a[-1]\n"); 
+print("@a\n");</code></pre><p>There are other ways of creating arrays. For sequential numbers / alphabets,</p><pre><code class='perl'>#!/bin/perl
+
+@numbers = (1..50);
+@alphabets = (a..z);
+
+print "@numbers\n"; 
+print "@alphabets\n";</code></pre><h2>Array Size</h2><hr/><p>The size of an array can be found by accessing it in the scalar context. Now what is that? That is not as complicated as it sounds. When we assign an array to a scalar variable, we get the value in a scalar context. We can also do the same by adding the explicit keyword "scalar".</p><pre><code class='perl'>#!/bin/perl
+
+@array = ("Test", "Array", "Size");
+
+$size = @array;                         # This assignment forces the scalar context.
+print "Size of array:", scalar @array;         # In this case, explicit keyword is required.</code></pre><h2>Modifying the Array</h2><hr/><p>Perl provides for push, pop, shift and unshift to add and remove elements from either ends. The push and unshift are not limited to one element. We can pass in a list or an array and it works well.</p><pre><code class='perl'>#!/usr/bin/perl
+
+# create a simple array
+@coins = ("Quarter","Dime","Nickel");
+print "1. \@coins  = @coins\n";
+
+# add one element at the end of the array
+push(@coins, "Penny");
+print "2. \@coins  = @coins\n";
+
+# add one element at the beginning of the array
+unshift(@coins, "Dollar");
+print "3. \@coins  = @coins\n";
+
+# remove one element from the last of the array.
+pop(@coins);
+print "4. \@coins  = @coins\n";
+
+# remove one element from the beginning of the array.
+shift(@coins);
+print "5. \@coins  = @coins\n";</code></pre><p>That takes care of either ends. Perl also provides slicing that helps us with intermediate elements.</p><pre><code class='perl'>#!/bin/perl
+
+@nums = (1..20);
+print "Before - @nums\n";
+
+print "@nums[1, 5, -2]\n";
+print "@nums[2..10]\n";
+
+splice(@nums, 5, 5, 21..25); 
+print "After - @nums\n";</code></pre><h2>Sorting Arrays</h2><hr/><p>Perl provides the keyword sort to sort arrays.</p><pre><code class='perl'>#!/bin/perl
+
+@strings = ("Perl", "provides", "the", "keyword", "sort", "to", "sort", "arrays");
+print sort @strings;
+
+@numbers = (1, 44, 9, 5, 8);
+print sort @numbers, "\n";         # Sorts in alphabetical order
+print sort {$a <=> $b} @numbers    # Sorts in numeric order.</code></pre><p>By default, sort function sorts elements by the alphabetical order. But Perl allows us to pass in our own implementation of the sort order. The code inside the curly braces could include any kind of logic that works consistently and returns -1, 0 and 1 by comparing the values passed into it. This method should be consistent and fit the expected requirements of a comparator - else the result will be messed up. It can also get into an infinite loop if the implementation is bad enough.</p><h2>Iterating over an Array</h2><hr/><p>Any language worth its name makes some provision for iteration. For and while loops are quite common. Perl adds its own flavor to these. In fact, Perl has many different ways of looping over arrays. Some examples below:</p><pre><code class='perl'>#!/bin/perl
+
+@a = (1..100);
+
+for ($i=0; $i<@a; $i++) {
+    print $a[$i], "\n";
+}
+print $a[$i], "\n" for ($i=0; $i<@a; $i++);
+
+while ($i++ < @a) {
+    print $a[$i], "\n";
+}
+print $a[$i], "\n" while($i++ < @a);
+
+foreach $x (@a) {
+    print "$x\n";
+}
+print "$x\n" foreach $x (@a);</code></pre><h2>Allocation</h2><hr/><p>Perl arrays are self allocating. We do not need to allocate explicitly. Just assigning a value to an index ensures the memory allocation - if the memory is available - else the application will dump. Similarly, when we try to read from an index, it will return irrespective of whether the array actually has that element. If the value is not allocated, it returns undef. We can explicitly delete an element and set it to undef by using the method undef</p><pre><code class='perl'>#!/bin/perl
+
+@a = (1..10);
+print "@a\n";
+
+undef($a[5]);
+print "@a\n";
+
+print "$x\n" if(defined $x) foreach $x (@a);</code></pre><h2>Scalar Functions</h2><hr/><p>Many functions that make sense for scalars are extended for arrays. When applied on an array, they work on all the elements of the array.</p><pre><code class='perl'>#!/bin/perl
+
+@a = ("chop", "every", "word", "in", "this", "array");
+chop @a;
+print "@a\n";</code></pre><p>Note that this may not work for all functions. It will work only if the method implements the extension for arrays. Else we have other ways like map.</p><pre><code class='perl'>#!/bin/perl
+
+@a = ("chop", "every", "word", "in", "this", "array");
+@a = map { chop } @a;
+print "@a\n";</code></pre><p>The map function essentially loops through the list and passes each element to the code inside the curly braces. The result of each such iteration is accumulated into a new array that is returned by the map.</p>
+
+</body><script>loadPageFormat();</script></script></html>

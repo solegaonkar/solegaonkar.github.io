@@ -1,0 +1,38 @@
+<!DOCTYPE html><html><head><title>Kmeans Clustering with ScikitLearn</title><script src='scripts/index.js'></script></head><body><h1>Kmeans Clustering with ScikitLearn</h1><hr/>
+
+<p>K-Means is an interesting way of identifying clusters in the given data. Conceptually, we can think of the process as follows:</p><p>If we want to identify K clusters in the data set; we start with picking K separate points in the data space. Assuming these K points are the centroids, identify the K clusters. Any point in the data space belongs to the cluster defined by the closest centroid. Now, based on these clusters identify the new centroids. And then identify the clusters again. If we do this recursively, we should ideally end up with a situation where the K centroids do not move much on each iteration. The clusters are thus identified using the K-Means algorithm.</p><p>Ofcourse, there are several important factors here. How do you choose K? If K is very large, we might end up with a cluster for every data point. That defeats the purpose of clustering. On the other hand, if we use K = 1, we have one big cluster for the entire data set. This again defeats the purpose. Ideally, we should choose K such that the clusters identified are indeed different from each other - That is the distance of all points from the respective centroid is significantly less than the distance between the centroids.</p><p>More formally, sum of square of distance between centroid and the data points within each cluster is considered a metric for optimizing the model. As the value of K increases, the sum of square of distances decreases for every step. But this decreases is very fast for the initial values of K, and then it slows down. This defines the right value of K.</p><h2>Implementation</h2><hr/><p>This is easy to implement in Python using ScikitLearn. We start with importing the libraries. The make_blob provides a utility to generate clusters.</p><pre><code class='python'>from sklearn.datasets.samples_generator import make_blobs
+from sklearn.cluster import KMeans
+from sklearn.model_selection import train_test_split</code></pre><p>With this, we now create the data and split it into the train and test sets</p><pre><code class='python'>X, y = make_blobs(n_samples=50000, centers=5, n_features=5, random_state=0)
+X_train, X_test, Y_train, Y_test = train_test_split(X, y, stratify=y, random_state=50)</code></pre><p>Next step is to instantiate the KMeans model. Since we know that the data contains 5 blobs, we will start with model of 5 centers. Later, we will try to play with other values.</p><pre><code class='python'>km = KMeans(n_clusters=5, random_state=10, max_iter=500)
+km.fit(X_train)</code></pre><p>Now we can check out the clusters defined by the algorithm</p><pre><code class='python'>predicted = km.predict(X_train)
+predicted
+...
+array([2, 2, 2, ..., 0, 4, 4])</code></pre><p>Lets compare this with the Y_train that we already have.</p><pre><code class='python'>Y_train
+...
+array([1, 1, 1, ..., 4, 2, 2])</code></pre><p>They don't match! But that is not a problem. Note that we are working on clustering and not supervised learning. We did not specify the value of Y when we trained the model. So it identified its own clusters - and numbered them by itself. These numbers have no reason to match with the numbers that we have in Y. But it is important that there is a good mapping between the two. That is, cluster 2 in predicted is always cluster 1 in Y and so on. So long as this is satisfied, we are good.</p><p>Similarly, let us check how this works on the test data</p><pre><code class='python'>predicted = km.predict(X_test)
+predicted
+...
+array([3, 2, 4, ..., 4, 4, 3])</code></pre><pre><code class='python'>Y_test
+...
+array([0, 1, 2, ..., 2, 2, 0])</code></pre><p>Again, the values don't match. But the mapping is exactly as we saw in the train data. This means the model has correctly classified the data into the appropriate clusters.</p><p>We can play around with the model here. Let us try to fit the data into 4 clusters instead of 5. Try running this script and you will see that the data matches reasonably. But there are some misses.</p><pre><code class='python'>km = KMeans(n_clusters=4, random_state=10, max_iter=500)
+km.fit(X_train)
+km.predict(X_train)
+Y_train
+...
+array([3, 3, 3, ..., 0, 0, 0])
+array([1, 1, 1, ..., 4, 2, 2])</code></pre><pre><code class='python'>km.predict(X_test)
+Y_test
+...
+array([2, 3, 0, ..., 0, 0, 2])
+array([0, 1, 2, ..., 2, 2, 0])</code></pre><p>On the other hand, if we try to increase the number of clusters to a high number 10 instead of 4, we again see some misses.</p><pre><code class='python'>km = KMeans(n_clusters=10, random_state=10, max_iter=500)
+km.fit(X_train)</code></pre><pre><code class='python'>km.predict(X_train)
+...
+array([8, 3, 8, ..., 9, 1, 7])</code></pre><pre><code class='python'>Y_train
+...
+array([1, 1, 1, ..., 4, 2, 2])</code></pre><pre><code class='python'>km.predict(X_test)
+...
+array([5, 3, 7, ..., 1, 1, 2])</code></pre><pre><code class='python'>Y_test
+...
+array([0, 1, 2, ..., 2, 2, 0])</code></pre><p>One might expect a kind of overfitting here. But that does not happen. Instead, existing clusters break apart in trying to accommodate the additional cluster and that garbles the train as well as the test results.</p>
+
+</body><script>loadPageFormat();</script></script></html>

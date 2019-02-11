@@ -1,0 +1,35 @@
+<!DOCTYPE html><html><head><title>PyTorch - Create Tensor</title><script src='scripts/index.js'></script></head><body><h1>PyTorch - Create Tensor</h1><hr/>
+
+<p>PyTorch provides us several ways to create tensors (tensor object to be precise). There are different ways to create tensors. Let us look at them one by one.</p><h3>Directly from data</h3><hr/><p>We can create a tensor by providing the required data in form of a python array.</p><pre><code class='python'>x = torch.tensor([5.5, 3])</code></pre><p>This creates a tensor with the data provided. We can check that out by printing the contents of x. This generates the below output.</p><pre><code class='python'>tensor([5.5000, 3.0000])</code></pre><h3>Empty Tensor</h3><hr/><p>We can create an empty tensor, with uninitialized values for each element using empty(). This creates the tensor but does not set any values. </p><pre><code class='python'>x = torch.empty(5, 3)
+print(x)</code></pre><p>This generates a tensor with junk data - something like this.</p><pre><code class='python'>tensor([[7.3440e-10, 2.5375e-2, 2.4460e-8],
+        [7.8675e-21, 2.5431e+20, 6.7083e+41],
+        [3.4553e+15, 3.5163e+16, 3.5669e+25],
+        [6.7581e+29, 1.3956e+23, 1.3644e+24],
+        [1.3032e-10, 2.5664e+22, 1.3759e+23]])</code></pre><p>It could be zeros or any junk value depending upon the piece of memory allocated.</p><h3>Tensor with Zeros</h3><hr/><p>If required, we can explicitly initialize the tensor with certain values. For example, we can initialize it to zeros.</p><pre><code class='python'>x = torch.zeros(5)
+print(x)</code></pre><p>This generates a tensor with all values initialized to 0.</p><pre><code class='python'>tensor([[0.0000, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.0000],
+        [0.0000, 0.0000, 0.0000]])</code></pre><h3>Tensor with Ones</h3><hr/><p>Similarly, we can create a tensor with all values set to 1.</p><pre><code class='python'>x = torch.ones(5, 3)
+print(x)</code></pre><p>This generates a tensor with all values initialized to 1.</p><pre><code class='python'>tensor([[1., 1., 1.],
+        [1., 1., 1.],
+        [1., 1., 1.],
+        [1., 1., 1.],
+        [1., 1., 1.]])</code></pre><h3>Random Values</h3><hr/><p>Similarly, we can create a tensor with random values.</p><pre><code class='python'>x = torch.rand(5,3)
+print (x)</code></pre><p>This generates a tensor initialized with random values.</p><pre><code class='python'>tensor([[0.8003, 0.6004, 0.7618],
+        [0.7390, 0.7990, 0.7251],
+        [0.2386, 0.4203, 0.0351],
+        [0.1759, 0.7136, 0.9982],
+        [0.2051, 0.0417, 0.1011]])</code></pre><h3>Data Type</h3><hr/><p>We can also specify a particular data type while creating tensors. For example</p><pre><code class='python'>x = torch.rand(5, 3, dtype=torch.double)
+print (x)</code></pre><p>This creates a tensor with type double.</p><pre><code class='python'>tensor([[0.2077, 0.2080, 0.0065],
+        [0.9539, 0.8458, 0.5166],
+        [0.2388, 0.1750, 0.6083],
+        [0.8736, 0.9702, 0.6339],
+        [0.4770, 0.9196, 0.4003]], dtype=torch.float64)</code></pre><p>Similarly, we can specify torch.int, torch.float, torch.long</p><h3>Tensor Like</h3><hr/><p>PyTorch also provides us methods to create a tensor based on an existing one. The new tensor has the same size.</p><pre><code class='python'>y = torch.zeros_like(x, dtype=torch.float)
+print (y)</code></pre><p>This creates a new tensor y, with shape same as that of x. The new tensor y has all values set to zero.</p><pre><code class='python'>tensor([[0., 0., 0.],
+        [0., 0., 0.],
+        [0., 0., 0.],
+        [0., 0., 0.],
+        [0., 0., 0.]])</code></pre><p>Similarly, we can have ones_like and rand_like.</p>
+
+</body><script>loadPageFormat();</script></script></html>

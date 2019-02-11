@@ -1,0 +1,44 @@
+<!DOCTYPE html><html><head><title>R Data Frames</title><script src='scripts/index.js'></script></head><body><h1>R Data Frames</h1><hr/>
+
+<p>All data in vectors and matrices is enforced to a single data type. But Data Frames let you overcome this limitation. A data frame can contain several elements of different types. An example of R Data Frame can be seen here:</p><pre><code class='r'>&gt; WorldPhones
+     N.Amer Europe Asia S.Amer Oceania Africa Mid.Amer
+1951  45939  21574 2876   1815    1646     89      555
+1956  60423  29990 4708   2568    2366   1411      733
+1957  64721  32510 5230   2695    2526   1546      773
+1958  68484  35218 6662   2845    2691   1663      836
+1959  71799  37598 6856   3000    2868   1769      911
+1960  76036  40341 8220   3145    3054   1905     1008
+1961  79831  43173 9053   3338    3224   2005     1076
+&gt;</code></pre><h3>Creating Data Frame</h3><hr/><p>A new data frame object can be created using the function data.frame()</p><pre><code class='r'>&gt; empty &lt;- data.frame() # empty data frame
+&gt; vector.1 &lt;- 1:10 # vector of integers
+&gt; vector.2 &lt;- letters[1:10] # vector of strings
+&gt; df &lt;- data.frame(column.1=vector.1,column.2=vector.2)
+&gt; 
+&gt; df
+   column.1 column.2
+1         1        a
+2         2        b
+3         3        c
+4         4        d
+5         5        e
+6         6        f
+7         7        g
+8         8        h
+9         9        i
+10       10        j
+&gt;</code></pre><h3>Importing and Exporting Data</h3><hr/><p>You can export and import the data frame to a CSV file. This is useful for saving the context of a data operation.</p><pre><code class='r'>&gt; write.csv(df, file='mydata.csv')     # Save the data frame to CSV file
+&gt;</code></pre><p>You can load the contents from the CSV file as below</p><pre><code class='r'>&gt; d2 &lt;- read.csv('mydata.csv')         # Load the data frame from CSV file
+&gt; d2
+    X column.1 column.2
+1   1        1        a
+2   2        2        b
+3   3        3        c
+4   4        4        d
+5   5        5        e
+6   6        6        f
+7   7        7        g
+8   8        8        h
+9   9        9        i
+10 10       10        j</code></pre><p>Please note that there is a difference in what we saved and what we read from the file. The row numbers are also saved in the CSV and then loaded as an independent column when reading from the CSV.</p>
+
+</body><script>loadPageFormat();</script></script></html>

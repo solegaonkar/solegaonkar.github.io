@@ -87,7 +87,7 @@ add = function (type, info) {
         html = "<" + type + ">" + text + "</" + type + ">";
     }
     content = content + html;
-    $("#html").val("<!DOCTYPE html><html><head><title>" + $("#title").val() + '</title></head><body><h1>' + $("#title").val() + '</h1><hr/>' + content + '</body><script src="src/index.js"></script></html>');
+    $("#html").val("<!DOCTYPE html><html><head><title>" + $("#title").val() + '</title><script src="scripts/index.js"></script></head><body><h1>' + $("#title").val() + '</h1><hr/>' + content + '</body><script>loadPageFormat();</script></html>');
     $("#blog").html(content);
     $("#content").val(content);
     $('pre code').each(function (i, block) {

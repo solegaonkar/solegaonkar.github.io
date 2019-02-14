@@ -5,4 +5,4 @@ sess2.run(B)
 sess1.run(C)
 sess2.run(D)</code></pre><p>Here, A and C will run under session 1, and will see one environment and B and D will run in the session 2 - and see another environment.</p><p>Once we have defined the nodes and compiled the graph, we can finally run the command to get value of a particular node in the graph. When we do so, TensorFlow looks back to check all the nodes that are required for this requested node. Only those nodes are evaluated in the appropriate order. Thus, a node in the graph is evaluated only when needed; only if it is needed.</p><p>This has a great impact on the processing speed and is a major advantage of TensorFlow.</p>
 
-</body><script>loadPageFormat();</script></script></html>
+</body><script>loadPageFormat();</script></html>

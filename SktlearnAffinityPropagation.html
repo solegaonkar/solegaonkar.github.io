@@ -21,4 +21,4 @@ for i in range(y1.shape[0]):
 
 print(mismatch)</code></pre><p>The output is 0! That means there is not a single mismatch. Affinity Propagation is very effective. But very expensive. Everything comes at a cost!</p><p>There are several hyper parameters that are required to make the Affinity Propagation effective.</p><h4>Damping</h4><hr/><p>Each new iteration of the Responsibility and Availability leads to recalculation of the clusters. Because of this, it is possible that the system gets into an oscillation without any convergence. In order to avoid this problem, the algorithm introduces Damping. This forces inertia on the changes by allocating some weight to the current position of the data point.</p><h4>Affinity</h4><hr/><p>The measure of affinity is perhaps the most important component in this exercise of clustering. Generally the euclidean affinity is used. But it is possible to push in any other measure of affinity - so long as it is consistent.</p>
 
-</body><script>loadPageFormat();</script></script></html>
+</body><script>loadPageFormat();</script></html>

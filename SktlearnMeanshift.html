@@ -24,4 +24,4 @@ for i in range(y1.shape[0]):
 print(mismatch1)
 print(mismatch2)</code></pre><p>The output is 0 and 120000! How did that happen? The script measures two types of problems. Two elements that were in the same cluster in the reference set should be in marked in the same cluster by the algorithm. And the other checks if two elements marked in the same cluster were actually in the same cluster. The first test passes without any problem. But the second one miserably goofed up. That means, the algorithm has grouped a few clusters together. So points that were not in the same cluster appear to be so. This limitation of the algorithm is that it identifies the cluster based on the density of points and if an entire cluster is not dense enough, it is pushed into another dense cluster. Thus, it may miss some clusters. But its performance is pretty good.</p>
 
-</body><script>loadPageFormat();</script></script></html>
+</body><script>loadPageFormat();</script></html>

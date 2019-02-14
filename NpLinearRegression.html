@@ -23,4 +23,4 @@ b = 0</code></pre><p>W is a matrix that defines the weights and b is the scalar 
 0.00027975071577271036</code></pre><p>That looks quite good. The error is only 0.02%. Let us now see how it works with the test data</p><pre><code class='python'>>> test(test_X, test_y)
 0.0025231840061720944</code></pre><p>This is 0.2%. A clear case of overfitting. But 0.2% error is not bad either.</p><p>Note that we did all this calculation without any concern for the kind of data that was present in the CSV file. We have no idea about the meaning of any field in there. Some of the fields have very little variation, some have a huge variation. Some of  them are discrete and others are continuous. Without bothering about any of these, we have arrived to such an accurate result with just linear regression!</p><p>In order to improve this model, we can have a look into the data. Some columns need normalization. Some of them can be discarded. Such tweaks can help reduce the overfitting.</p>
 
-</body><script>loadPageFormat();</script></script></html>
+</body><script>loadPageFormat();</script></html>

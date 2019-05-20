@@ -1,0 +1,18 @@
+<!DOCTYPE html><html><head><title>AWS Transcribe</title><script src="scripts/index.js"></script></head><body><h1>AWS Transcribe</h1><hr/><p>The Amazon Transcribe service can be used to recognize speech in audio files and convert it to text. It can identify the individual speakers in an audio clip. We can use it to convert audio to text and to create applications that incorporate the content of audio files, for example, adding subtitles to a movie, or noting the minutes of a meeting.</p><p>A simple Python application that uses Amazon Transcribe to analyze an audio clip looks like this</p><pre><code class='python'>import time
+import boto3
+transcribe = boto3.client('transcribe')
+job_name = "job name"
+job_uri = "https://S3 endpoint/test-transcribe/sample_audio.wav"
+transcribe.start_transcription_job(
+    TranscriptionJobName=job_name,
+    Media={'MediaFileUri': job_uri},
+    MediaFormat='wav',
+    LanguageCode='en-US'
+)
+while True:
+    status = transcribe.get_transcription_job(TranscriptionJobName=job_name)
+    if status['TranscriptionJob']['TranscriptionJobStatus'] in ['COMPLETED', 'FAILED']:
+        break
+    print("Not ready yet...")
+    time.sleep(5)
+print(status)</code></pre></body><script>loadPageFormat();</script></html>

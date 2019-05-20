@@ -1,0 +1,15 @@
+<!DOCTYPE html><html><head><title>AWS Polly</title><script src="scripts/index.js"></script></head><body><h1>AWS Polly</h1><hr/><p>Amazon Polly cloud based service that converts text to speech. We can use it to make applications more engaging and accessible. It supports multiple languages and includes a variety of lifelike voices.</p><p>AWS takes care of most of the job here. For a developer, it is just a few lines of code:</p><pre><code class='python'>import boto3
+
+polly_client = boto3.Session(
+                aws_access_key_id=,                     
+    aws_secret_access_key=,
+    region_name='us-west-2').client('polly')
+
+# Aditi specializes in Indian English.
+response = polly_client.synthesize_speech(VoiceId='Aditi',
+                OutputFormat='mp3', 
+                Text = 'Provide the text here. Polly will speak it for you.')
+
+file = open('speech.mp3', 'w')
+file.write(response['AudioStream'].read())
+file.close()</code></pre></body><script>loadPageFormat();</script></html>

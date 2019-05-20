@@ -1,0 +1,106 @@
+<!DOCTYPE html><html><head><title>Sage Maker</title><script src="scripts/index.js"></script></head><body><h1>Sage Maker</h1><hr/>
+
+<p>SageMaker is one of the fundamental offerings for AWS that helps us through all stages in the machine learning pipeline - build, train, tune and deploy. It provides us with simple Jupyter Notebook UI that can be used to script basic Python code. It can build models trained by data dumped into the S3 buckets, or a streaming data source like Kinesis shards. Once models are trained, SageMaker allows us to deploy them into production without any effort.</p><h2>Example</h2><hr/><p>Let us now try out an example - that can show us  the real power of SageMaker. We will work on the good old MNINST data set; going through all the phases of development on the SageMaker - right from training the model using the downloaded data - up to deploying a Lambda function that can leverage the predictor endpoint developed by SageMaker.</p><h3>S3 Bucket</h3><hr/><p>The SageMaker uses an S3 bucket to dump its model as it works. It is also convenient to dump the data into an S3 bucket as we train the model. Hence, the first step is to choose an S3 bucket that we use for the purpose. I have a bucket dedicated to SageMaker. I call it sagemaker-dumps. You can choose a name that suites your purpose.</p><p>This bucket need not have any public access as we work on it from within SageMaker. The life-cycle rule can move the files into IA or Glacier - because we rarely use the training data after the model is finalized.</p><h3>Notebook Instance</h3><hr/><p>After finalizing the S3 bucket, let's get back to SageMaker. The next step is to provision and create a Notebook instance. Let us start with that.</p><p>Open the SageMaker service from the AWS console and navigate to the Notebook Instances. Click on the button "Create Notebook Instance" - to get started. It will prompt for Notebook Instance Settings. Give it a good name and choose the ml.m2.instance. That is the lowest and will serve the our purpose for now. We can choose higher ones when working on "real" models. Don't worry about the cost. AWS promises us pay per use pricing.</p><div class='center'><img src='img/sagemaker-create-notebook-1.png' width="100%"/></div><p>Leave the rest on the default and move forward.</p><p>Next, we need to create an IAM role for our Notebook. Remember that our data and models need to live in an S3 bucket that we just created. So the Notebook should have an access to that bucket. We do not need any other particular privilege for the Notebook.</p><div class='center'><img src='img/sagemaker-create-notebook-2.png' width='100%' /></div><p>Now, we can go ahead and "Create". AWS takes some time to get the Notebook ready. We can see on the console that the Notebook Instance is "Pending"</p><p><div class='center'><img src='img/sagemaker-create-notebook-3.png' width='100%' /></div></p><p>Let it work its way, as AWS provisions the underlying instance and prepares it for our purpose. Once it is ready, we can see the console says the Notebook instance is "InService"</p><p><div class='center'><img src='img/sagemaker-create-notebook-4.png' width='100%' /></div></p><h3>JupyterLab</h3><hr/><p>Once we are ready with a Notebook instance, we can move further to create a JupyterLab. On the Notebook instance console, we can see two links in the Actions column - Open Jupyter and Open JupyterLab. Anyone working on AI certainly knows what is a Jupyter Notebook. JupyterLab is just that, with some AWS flavor on it. So, lets click on JupyterLab.</p><p>That opens a pop-up like this:</p><p><div class='center'><img src='img/sagemaker-create-notebook-5.png' width='100%' /></div></p><p>It provides several ready to use templates, and also allows us to create our own. At this time, we would like to build our own template. So let us take that way forward. Click on File -> New -> Notebook</p><p><div class='center'><img src='img/sagemaker-create-notebook-6.png' width='50%' /></div></p><p>It will prompt you to choose a Kernel for the Jupyter Notebook that opens. I love Anaconda Python 3. So I choose that. It should be good enough for the purpose of  this example. The curious can try playing around with the other Kernels.</p><p><div class='center'><img src='img/sagemaker-create-notebook-7.png' width='40%' /></div></p><p>With this, the familiar Jupyter Notebook shows up. I do not like the "Untitled" Notebooks. So I rename it to something more meaningful.</p><p><div class='center'><img src='img/sagemaker-create-notebook-8.png' width='40%' /></div></p><h3>Prepare the Data</h3><hr/><p>With the framework in place, we can now go ahead with building the model. The first step in any Python code is ofcourse, importing the relevant modules.</p><pre><code class='python'># The Usual Python Modules 
+import os
+import re
+import copy
+import time
+import struct
+import io
+import csv
+from time import gmtime, strftime
+
+import pickle, gzip, urllib.request, json
+import numpy as np
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+# AWS Python SDK modules
+import boto3
+import sagemaker
+from sagemaker.amazon.amazon_estimator import get_image_uri
+from sagemaker import get_execution_role</code></pre><p>Next, we can create a few placeholder variables that make our life simpler.</p><pre><code class='python'>role = get_execution_role()
+region = boto3.Session().region_name
+
+bucket='sagemaker-dumps' # Put your s3 bucket name here
+prefix = 'sagemaker/learn-mnist2' # Used as part of the path in the bucket where you store data
+# customize to your bucket where you will store data
+bucket_path = 'https://s3-{}.amazonaws.com/{}'.format(region,bucket)</code></pre><p>Now that the ground work is ready, we can download our the data we use to build our models. We download the data from the "deeplearning.net". Once we have tar.gz file, we extract and split the data into our train, test and validation sets.</p><pre><code class='python'># Load the dataset
+urllib.request.urlretrieve("http://deeplearning.net/data/mnist/mnist.pkl.gz", "mnist.pkl.gz")
+with gzip.open('mnist.pkl.gz', 'rb') as f:
+    train_set, valid_set, test_set = pickle.load(f, encoding='latin1')</code></pre><p>Let us now have a look at the the data we have gathered.</p><pre><code class='python'>print(train_set[0].shape)
+print(train_set[1].shape)</code></pre><p>This gives us an output</p><pre><code class='python'>(50000, 784)
+(50000, )</code></pre><p>We have 50,000 records in the train set. Each of these is an image of 28x28. And each of these images maps to a value that is a number represented by the image.</p><pre><code class='python'>plt.rcParams["figure.figsize"] = (2,10)
+
+img = train_set[0][0]
+label = train_set[1][0]
+img_reshape = img.reshape((28,28))
+imgplot = plt.imshow(img_reshape, cmap='gray')
+print('This is a {}'.format(label))
+plt.show()</code></pre><p>This shows the output:</p><div class='left'><img src='img/sagemaker-sample-record-5.png' /></div><p>Wow! We have the data to train the model. But this data is not good for our job. We need to play around a bit with the data structures - to make this ready for training our model.</p><p>Having done that, we dump it into our S3 bucket.</p><pre><code class='python'>data_partitions = [('train', train_set), ('validation', valid_set), ('test', test_set)]
+
+for data_partition_name, data_partition in data_partitions:
+    labels = [t.tolist() for t in data_partition[1]]
+    features = [t.tolist() for t in data_partition[0]]
+      
+    if data_partition_name != 'test':
+        examples = np.insert(features, 0, labels, axis=1)
+    else:
+        examples = features
+
+    np.savetxt('data.csv', examples, delimiter=',')
+        
+    key = "{}/{}/examples".format(prefix,data_partition_name)
+    url = 's3n://{}/{}'.format(bucket, key)
+    boto3.Session().resource('s3').Bucket(bucket).Object(key).upload_file('data.csv')
+</code></pre><h3>Build the Model</h3><hr/><p>Now that the data is ready, let us proceed with building and deploying the model that we can use for our job.</p><p>In the code above, we dumped our data into the S3 bucket. We can use a reference to that data to feed into our mode. So let us start with creating the data channels that SageMaker will use for the purpose.</p><pre><code class='python'>train_data = 's3://{}/{}/{}'.format(bucket, prefix, 'train')
+validation_data = 's3://{}/{}/{}'.format(bucket, prefix, 'validation')
+s3_output_location = 's3://{}/{}/{}'.format(bucket, prefix, 'learn_model_sdk')
+
+train_channel = sagemaker.session.s3_input(train_data, content_type='text/csv')
+valid_channel = sagemaker.session.s3_input(validation_data, content_type='text/csv')
+
+data_channels = {'train': train_channel, 'validation': valid_channel}</code></pre><p>Note that the "data_channels" holds reference to all the data we need for training our model. </p><p>AWS helps us with a channel that connects SageMaker with the S3. That makes our job pretty simple. We do not have to burden the instance RAM for it.</p><p>SageMaker also helps us with building the common training algorithms. These come predeployed on the Docker containers in the ECS. SageMaker helps us with a direct link to these containers. All we need is an API to get one for ourselves!</p><p>So, all we do is: get a container, instantiate a model, and train it.</p><pre><code class='python'>container = get_image_uri(boto3.Session().region_name, 'xgboost')
+
+xgb_model = sagemaker.estimator.Estimator(container,
+                                         role, 
+                                         train_instance_count=1, 
+                                         train_instance_type='ml.m4.10xlarge',
+                                         train_volume_size = 5,
+                                         output_path=s3_output_location,
+                                         sagemaker_session=sagemaker.Session())
+
+xgb_model.set_hyperparameters(max_depth = 5,
+                              eta = .2,
+                              gamma = 4,
+                              min_child_weight = 6,
+                              silent = 0,
+                              objective = "multi:softmax",
+                              num_class = 10,
+                              num_round = 10)
+
+xgb_model.fit(inputs=data_channels,  logs=True)</code></pre><p>The final xgb_model.fit() generates the training logs as the model is built over iterations. And finally the estimator is ready for us.</p><h3>Deploy Model</h3><hr/><p>Deploying the model is as easy as the rest of the process. All we do is invoke one command within the Notebook.</p><pre><code class='python'>xgb_predictor = xgb_model.deploy(initial_instance_count=1,
+                                instance_type='ml.m4.xlarge',
+                                )</code></pre><p>This deploys the model and generates the Endpoints that can be invoked from our code.</p><p>We can navigate to the SageMaker - Models console. There, we can see our model ready for us.</p><div class='center'><img src='img/sagemaker-model.png' width="100%"/></div><p>We can also check the SageMaker - Endpoint console. Here, we can see the Endpoint waiting for us.</p><p><div class='center'><img src='img/sagemaker-endpoint.png' width="100%"/></div></p><h3>Lambda Function</h3><hr/><p>The rest is trivial. Once we have the model and endpoint deployed, we can create a Lambda Function that could be invoked via the API Gateway. The Lambda Function could be as simple as this:</p><pre><code class='python'>import os
+import boto3
+import json
+
+# grab environment variables
+ENDPOINT_NAME = os.environ['ENDPOINT_NAME']
+runtime= boto3.client('runtime.sagemaker')
+
+def lambda_handler(event, context):
+    print("Received event: " + json.dumps(event, indent=2))
+    
+    data = json.loads(json.dumps(event))
+    payload = data['data']
+    print(payload)
+    
+    response = runtime_client.invoke_endpoint(EndpointName = ENDPOINT_NAME,
+                                              ContentType = 'text/csv',
+                                              Body = payload)
+
+    result = response['Body'].read().decode('ascii')
+  
+    return 'Predicted label is {}.'.format(result)</code></pre><p>This is feasible in our case because the images we used are small - 784 pixels. It may not be healthy to send out hefty images as parameters to lambda functions. In such a case, we can create a mini architecture where we dump the images into an S3 bucket - that triggers the Lambda function to decode it and then trigger an SNS notification back to the invoking Amplify.</p></body><script>loadPageFormat();</script></html>

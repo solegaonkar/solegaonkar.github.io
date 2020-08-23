@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><title>Data Augmentation</title><script src='scripts/index.js'></script></head><body><h1>Data Augmentation</h1><hr/><p><a href="">TheWiz.Net</a></p>
+<!DOCTYPE html><html><head><title>Data Augmentation</title><script src='scripts/index.js'></script></head><body><h1>Data Augmentation</h1><hr/><p><a href="https://thewiz.net"><h4>TheWiz.Net</h4></a></p>
 
 <p>The resources we have are always less than what we need. Data is not an exception. To achieve better and better outcomes, we need a lot more than what we have. And we can generate more data from what is available to us - using our knowledge about the data. For example, we know that the number does not change if the entire image is shifted a pixel on either side.</p><p>Thus, each image in the input set can generate four more images by shifting by one pixel on each side. The images appear almost unchanged to our eye. But for the neural network model, it is a new input set. This simple information can give us 5 times as much data. Let's do that.</p><pre><code class='python'>A = np.delete(train_images, np.s_[:28:], 1)
 A = np.insert(A, [A.shape[1]] * 28, [0]*28, 1)

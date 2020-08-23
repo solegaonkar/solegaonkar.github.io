@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><title>Train the Model</title><script src='scripts/index.js'></script></head><body><h1>Train the Model</h1><hr/>
+<!DOCTYPE html><html><head><title>Train the Model</title><script src='scripts/index.js'></script></head><body><h1>Train the Model</h1><hr/><p><a href="">TheWiz.Net</a></p>
 
 <p>With everything in place, we can now start off with training a model. We start with creating a Keras Sequential model. We can check out the details about different types of models in the following blogs:</p><pre><code class='python'>model = tf.keras.Sequential()</code></pre><p>Let us add three layers to this model. Keras allows us to add many layers. But for a problem like this, 3 layers should be good enough.</p><pre><code class='python'>model.add(tf.keras.layers.Dense(50, activation=tf.nn.relu, input_shape=(784,)))
 model.add(tf.keras.layers.Dense(25, activation=tf.nn.relu))

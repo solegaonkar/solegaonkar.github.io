@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><title>Current Queries</title><script src='scripts/index.js'></script></head><body><h1>Current Queries</h1><hr/>
+<!DOCTYPE html><html><head><title>Current Queries</title><script src='scripts/index.js'></script></head><body><h1>Current Queries</h1><hr/><p><a href="">TheWiz.Net</a></p>
 
 <p>It is perhaps an integral part of the software development life cycle, that once the application is developed and deployed, it crashes - or at least hangs. Most of us have seen this happen. And the database is the primary suspect in the debugging process. </p><p>In order to identify the culprit or to prove innocence, we need to identify what query is running in the database at that time. Oracle provides us many different ways for doing that.</p><p>We have two important system views - V$SQLTEXT and V$SESSION. The first gives us the actual SQL text for any SQL query that was executed, and V$SESSION gives us the information for any session. The history retention is configurable. These two can be joined as below, to get information about the currently running SQL queries:</p><pre><code class='sql'>SELECT
     s.username,
